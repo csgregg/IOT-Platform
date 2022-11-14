@@ -17,5 +17,4 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-require_once '/iot/users/init.php';
-echo $abs_us_root.$us_url_root.'users/includes/template/prep.php';
+require_once 'https://greggs.org/iot/users/init.php';
