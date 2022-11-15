@@ -11,7 +11,12 @@
  $host = "myhost.com";
  $pwd = "password";
 
-echo json_encode(42); // In the end, you need to echo the result.
+ $vars = array(
+    "host"=>$host,
+    "pwd"=>$pwd
+ );
+
+echo json_encode($vars); // In the end, you need to echo the result.
                       // All data should be json_encode()d.
 
                       // You can json_encode() any value in PHP, arrays, strings,
