@@ -35,31 +35,19 @@ $mqtt = new bluerhinos\phpMQTT($host, $port, "ClientID".rand(),  $cafile);
 
 if ($mqtt->connect(true,NULL,$username,$password)) {
   $mqtt->publish("topic",$message, 0);
+
+
+
+  $mqtt->subscribe('testtopic', function ($topic, $message) {
+    printf("Received message on topic [%s]: %s\n", $topic, $message);
+}, 0);
+
+
   $mqtt->close();
 }else{
   echo "Fail or time out
 ";
 }
-
-function procmsg($topic, $msg){
-    echo "Msg Recieved: $msg\n";
-  }
-
-$topic = "testtopic";
-
-if ($mqtt->connect(true,NULL,$username,$password)) {
-    $topics[$topic] = array(
-        "qos" => 0,
-        "function" => "procmsg"
-    );
-    $mqtt->subscribe($topics,0);
-    echo "1";
- //   while($mqtt->proc()) {}
-    $mqtt->close();
-  } else {
-    exit(1);
-  }
-
 
 ?>
 
