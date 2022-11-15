@@ -32,7 +32,7 @@ oReq.onload = function() {
 }
 
 try {
-    oReq.open("get", "vardata.php", true);
+    oReq.open("get", "vasrdata.php", true);
     //                               ^ Don't block the rest of the execution.
     //                                 Don't wait until the request finishes to
     //                                 continue.
