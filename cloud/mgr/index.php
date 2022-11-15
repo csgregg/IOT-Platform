@@ -41,6 +41,7 @@ if ($mqtt->connect(true,NULL,$username,$password)) {
     echo $msg;
 }, 0);
 
+sleep(10);
 
   $mqtt->close();
 }else{
