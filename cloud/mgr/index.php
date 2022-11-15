@@ -47,6 +47,7 @@ if ($mqtt->connect(true,NULL,"testtest","TestTest1")) {
 
 <div class="row">
 	<div class="col-sm-12">
+        Hmm2
 	</div>
 </div>
 
