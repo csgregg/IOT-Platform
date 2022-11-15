@@ -54,7 +54,7 @@ if ($mqtt->connect(true,NULL,$username,$password)) {
     );
     $mqtt->subscribe($topics,0);
     echo "1";
-    while($mqtt->proc()) {}
+ //   while($mqtt->proc()) {}
     $mqtt->close();
   } else {
     exit(1);
