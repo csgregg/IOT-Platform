@@ -97,6 +97,7 @@ function MQTTconnect() {
         onFailure: onFailure,
         useSSL: true,
     };
+    console.log("1a");
     if (user_name !="")
         options.userName=hivemq_user;
     if (password !="")
