@@ -1,12 +1,9 @@
 <?php
-/* Do some operation here, like talk to the database, the file-session
- * The world beyond, limbo, the city of shimmers, and Canada.
- *
- * AJAX generally uses strings, but you can output JSON, HTML and XML as well.
- * It all depends on the Content-type header that you send with your AJAX
- * request. */
-
-
+require_once '../users/init.php';
+require_once $abs_us_root.$us_url_root.'users/includes/template/prep.php';
+if (!securePage($_SERVER['PHP_SELF'])) {
+    die();
+}
 
  $host = "myhost.com";
  $pwd = "password";
