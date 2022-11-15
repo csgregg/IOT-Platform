@@ -28,7 +28,7 @@ if (!securePage($_SERVER['PHP_SELF'])) {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.2/mqttws31.js">
 
 // Create a client instance: Broker, Port, Websocket Path, Client ID
-client = new Paho.MQTT.Client("9840f44798c7434ab5fea3ff5c993221.s2.eu.hivemq.cloud", Number(8883), "testtopic", "clientId",);
+client = new Paho.MQTT.Client("9840f44798c7434ab5fea3ff5c993221.s2.eu.hivemq.cloud", Number(8883), "clientId-12032470912",);
 
 // set callback handlers
 client.onConnectionLost = function (responseObject) {
@@ -56,13 +56,18 @@ client.tls_insecure_set(True)
 
 
 // Connect the client, providing an onConnect callback
-client.connect({
-	onSuccess: onConnect
-});
+var options = {
+        useSSL: true,
+        userName : "testtest",
+        password : TestTest1",
+        onSuccess: onConnect,
+        onFailure: onFail
+    };
+client.connect(options);
 
 
 
-client.subscribe(testtopic);
+client.subscribe("testtopic");
 
 
 
