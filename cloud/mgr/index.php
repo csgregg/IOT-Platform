@@ -24,34 +24,52 @@ if (!securePage($_SERVER['PHP_SELF'])) {
 }
 ?>
 
-<?php
-require("phpMQTT.php");
-require("mq-broker.php");
-$message = "Hello CloudAMQP MQTT!";
-//MQTT client id to use for the device. "" will generate a client id automatically
-$mqtt = new bluerhinos\phpMQTT($host, $port, "ClientID".rand(),  $cafile);
 
-if ($mqtt->connect(true,NULL,$username,$password)) {
-  $mqtt->publish("topic",$message, 0);
+<script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.2/mqttws31.js">
 
+// Create a client instance: Broker, Port, Websocket Path, Client ID
+client = new Paho.MQTT.Client("9840f44798c7434ab5fea3ff5c993221.s2.eu.hivemq.cloud", Number(8883), "testtopic", "clientId",);
 
-
-  $mqtt->subscribe('testtopic', function ($topic, $message) {
-    $msg = sprintf("Received message on topic [%s]: %s\n", $topic, $message);
-    echo $msg;
-}, 0);
-
-sleep(10);
-
-  $mqtt->close();
-}else{
-  echo "Fail or time out
-";
+// set callback handlers
+client.onConnectionLost = function (responseObject) {
+    console.log("Connection Lost: "+responseObject.errorMessage);
 }
 
-?>
+client.onMessageArrived = function (message) {
+  console.log("Message Arrived: " + message.payloadString);
+  console.log(“Topic:     “ + message.destinationName);
+  console.log(“QoS:       “ + message.qos);
+  console.log(“Retained:  “ + message.retained);
+  // Read Only, set if message might be a duplicate sent from broker
+  console.log(“Duplicate: “ + message.duplicate);
+}
+
+// Called when the connection is made
+function onConnect(){
+	console.log(“Connected!”);
+}
 
 
+client.tls_set("isrgrootx1.pem", tls_version=ssl.PROTOCOL_TLSv1_2)
+client.tls_insecure_set(True)
+
+
+
+// Connect the client, providing an onConnect callback
+client.connect({
+	onSuccess: onConnect
+});
+
+
+
+client.subscribe(testtopic);
+
+
+
+
+
+
+</script>
 
 
 
