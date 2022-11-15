@@ -24,8 +24,6 @@ if (!securePage($_SERVER['PHP_SELF'])) {
 }
 ?>
 
-2
-
 <?php
 require("phpMQTT.php");
 require("mq-broker.php");
@@ -39,7 +37,8 @@ if ($mqtt->connect(true,NULL,$username,$password)) {
 
 
   $mqtt->subscribe('testtopic', function ($topic, $message) {
-    printf("Received message on topic [%s]: %s\n", $topic, $message);
+    $msg = sprintf("Received message on topic [%s]: %s\n", $topic, $message);
+    echo $msg;
 }, 0);
 
 
