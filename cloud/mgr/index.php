@@ -47,7 +47,11 @@ if ($mqtt->connect(true,NULL,$username,$password)) {
 
 <div class="row">
 	<div class="col-sm-12">
-Hello Toby
+    <?php
+  phpinfo(); // all info
+  // module info, phpinfo(8) identical
+  phpinfo(INFO_MODULES);
+?>
 	</div>
 </div>
 
