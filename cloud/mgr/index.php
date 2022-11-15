@@ -46,13 +46,7 @@ if (!securePage($_SERVER['PHP_SELF'])) {
 
 <td id="connect" width="300" >
 
- <form name="connform" action="" onsubmit="return MQTTconnect()">
-
-Server:  <input type="text" name="server"><br><br>
-Port:    <input type="text" name="port"><br><br>
-Clean Session: <input type="checkbox" name="clean_sessions" value="true" checked><br><br>
-Username: <input type="text" name="username" value=""><br><br>
-Password: <input type="text" name="password" value=""><br><br>
+<form name="connform" action="" onsubmit="return MQTTconnect()">
 <input name="conn" type="submit" value="Connect">
 <input TYPE="button" name="discon " value="DisConnect" onclick="disconnect()">
 </form>

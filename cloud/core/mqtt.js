@@ -53,28 +53,9 @@ function disconnect(){
 }
     
 function MQTTconnect() {
-    var clean_sessions=document.forms["connform"]["clean_sessions"].value;
- //   var user_name=document.forms["connform"]["username"].value;
-    console.log("clean= "+clean_sessions);
- //   var password=document.forms["connform"]["password"].value;
-    
-    if (clean_sessions=document.forms["connform"]["clean_sessions"].checked)
-        clean_sessions=true
-    else
-        clean_sessions=false
 
+    var clean_sessions=true;
     document.getElementById("status_messages").innerHTML ="";
-  /*  var s = document.forms["connform"]["server"].value;
-    var p = document.forms["connform"]["port"].value;
-    if (p!="")
-    {
-        port=parseInt(p);
-        }
-    if (s!="")
-    {
-        host=s;
-        console.log("host");
-        } */
 
     host = hivemq_host;
     port = parseInt(hivemq_port);
@@ -83,7 +64,7 @@ function MQTTconnect() {
 
     console.log("connecting to "+ host +" "+ port +" clean session="+clean_sessions);
     console.log("user "+user_name);
-    console.log("pwd "+password);
+
     document.getElementById("status_messages").innerHTML='connecting';
     var x=Math.floor(Math.random() * 10000); 
     var cname="orderform-"+x;
