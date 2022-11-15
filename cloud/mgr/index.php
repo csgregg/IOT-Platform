@@ -47,9 +47,6 @@ if ($mqtt->connect(true,NULL,$username,$password)) {
 
 <div class="row">
 	<div class="col-sm-12">
-<?php
-  phpinfo(); // all info
-?>
 	</div>
 </div>
 
