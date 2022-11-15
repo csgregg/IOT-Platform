@@ -54,9 +54,9 @@ function disconnect(){
     
 function MQTTconnect() {
     var clean_sessions=document.forms["connform"]["clean_sessions"].value;
-    var user_name=document.forms["connform"]["username"].value;
+ //   var user_name=document.forms["connform"]["username"].value;
     console.log("clean= "+clean_sessions);
-    var password=document.forms["connform"]["password"].value;
+ //   var password=document.forms["connform"]["password"].value;
     
     if (clean_sessions=document.forms["connform"]["clean_sessions"].checked)
         clean_sessions=true
@@ -64,7 +64,7 @@ function MQTTconnect() {
         clean_sessions=false
 
     document.getElementById("status_messages").innerHTML ="";
-    var s = document.forms["connform"]["server"].value;
+  /*  var s = document.forms["connform"]["server"].value;
     var p = document.forms["connform"]["port"].value;
     if (p!="")
     {
@@ -74,12 +74,12 @@ function MQTTconnect() {
     {
         host=s;
         console.log("host");
-        } 
+        } */
 
-  //  host = hivemq_host;
- //   port = parseInt(hivemq_port);
- //   user_name = hivemq_user;
- //   password = hivemq_pwd;
+    host = hivemq_host;
+    port = parseInt(hivemq_port);
+    user_name = hivemq_user;
+    password = hivemq_pwd;
 
     console.log("connecting to "+ host +" "+ port +" clean session="+clean_sessions);
     console.log("user "+user_name);
@@ -87,6 +87,7 @@ function MQTTconnect() {
     document.getElementById("status_messages").innerHTML='connecting';
     var x=Math.floor(Math.random() * 10000); 
     var cname="orderform-"+x;
+    console.log("1");
     mqtt = new Paho.MQTT.Client(host,port,cname);
     //document.write("connecting to "+ host);
     var options = {
@@ -95,16 +96,16 @@ function MQTTconnect() {
         onSuccess: onConnect,
         onFailure: onFailure,
         useSSL: true,
-        };
-        if (user_name !="")
-        options.userName=document.forms["connform"]["username"].value;
+    };
+    if (user_name !="")
+        options.userName=hivemq_user;
     if (password !="")
-        options.password=document.forms["connform"]["password"].value;
-    
-        mqtt.onConnectionLost = onConnectionLost;
-        mqtt.onMessageArrived = onMessageArrived;
-        mqtt.onConnected = onConnected;
-
+        options.password=hivemq_pwd;
+    console.log("2");
+    mqtt.onConnectionLost = onConnectionLost;
+    mqtt.onMessageArrived = onMessageArrived;
+    mqtt.onConnected = onConnected;
+    console.log("3");
     mqtt.connect(options);
     return false;
 }
