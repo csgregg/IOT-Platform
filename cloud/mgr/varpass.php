@@ -2,29 +2,36 @@
 ?>
 
 <script>
-    function reqListener () {
-      console.log(this.responseText);
+    function reqListener ();
+
+    function isJson(str) {
+        try {
+            JSON.parse(str);
+        } catch (e) {
+            return false;
+        }
+        return true;
     }
 
     var oReq = new XMLHttpRequest(); // New request object
+
     oReq.onload = function() {
         // This is where you handle what to do with the response.
         // The actual data is found on this.responseText
 
         var vars = JSON.parse(this.responseText);
 
-        Object.keys(vars).forEach(function(key) {
-            console.log('Key : ' + key + ', Value : ' + vars[key]);
-            window[key] = vars[key];
-        }
-        );
+        // Split JSON and load into local variables
+        Object.keys(vars).forEach( function(key) { window[key] = vars[key]; } );
 
-        alert(host);
-        alert(this.responseTest);
-    };
+        console.log(host);
+        console.log(pwd);
+    }
+
     oReq.open("get", "vardata.php", true);
     //                               ^ Don't block the rest of the execution.
     //                                 Don't wait until the request finishes to
     //                                 continue.
     oReq.send();
+    
 </script>
