@@ -2,7 +2,7 @@
 ?>
 
 <script>
-    function reqListener ();
+    function reqListener (){}
 
     function isJson(str) {
         try {
