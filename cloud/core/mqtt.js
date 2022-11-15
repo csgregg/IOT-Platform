@@ -62,15 +62,14 @@ function MQTTconnect() {
     user_name = hivemq_user;
     password = hivemq_pwd;
 
-    console.log("connecting to "+ host +" "+ port +" clean session="+clean_sessions);
-    console.log("user "+user_name);
+    console.log("Connecting to "+ host +" "+ port +" Clean session="+clean_sessions);
 
     document.getElementById("status_messages").innerHTML='connecting';
     var x=Math.floor(Math.random() * 10000); 
     var cname="orderform-"+x;
 
     mqtt = new Paho.MQTT.Client(host,port,cname);
-    //document.write("connecting to "+ host);
+
     var options = {
         timeout: 3,
         cleanSession: clean_sessions,
