@@ -26,13 +26,13 @@ if (!securePage($_SERVER['PHP_SELF'])) {
 
 <?php
 require("phpMQTT.php");
-
-
+require("mq-broker.php");
+$message = "Hello CloudAMQP MQTT!";
 //MQTT client id to use for the device. "" will generate a client id automatically
-$mqtt = new bluerhinos\phpMQTT("9840f44798c7434ab5fea3ff5c993221.s2.eu.hivemq.cloud", 8883, "ClientID".rand(), "server.crt");
+$mqtt = new bluerhinos\phpMQTT($host, $port, "ClientID".rand(), $cafile);
 
-if ($mqtt->connect(true,NULL,"testtest","TestTest1")) {
-  $mqtt->publish("topic","Hello CloudAMQP MQTT!", 0);
+if ($mqtt->connect(true,NULL,$username,$password)) {
+  $mqtt->publish("topic",$message, 0);
   $mqtt->close();
 }else{
   echo "Fail or time out
@@ -47,7 +47,6 @@ if ($mqtt->connect(true,NULL,"testtest","TestTest1")) {
 
 <div class="row">
 	<div class="col-sm-12">
-        Hoping
 	</div>
 </div>
 
