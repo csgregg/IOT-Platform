@@ -26,11 +26,71 @@ if (!securePage($_SERVER['PHP_SELF'])) {
 ?>
 a
 <script src="<?=$us_url_root?>core/varpasser.js" type="text/javascript"></script>
+<script src="<?=$us_url_root?>core/mqtt.js" type="text/javascript"></script>
 b
+<h1>Websockets MQTT Monitor</h1>
+	
+    <script type = "text/javascript">
+//ll
 
-<div class="row">
-	<div class="col-sm-12">
-	</div>
+</script>
+
+
+<div id="status">Connection Status: Not Connected</div>
+
+<br>
+<table>
+<tr>
+
+<td id="connect" width="300" >
+
+ <form name="connform" action="" onsubmit="return MQTTconnect()">
+
+Server:  <input type="text" name="server"><br><br>
+Port:    <input type="text" name="port"><br><br>
+Clean Session: <input type="checkbox" name="clean_sessions" value="true" checked><br><br>
+Username: <input type="text" name="username" value=""><br><br>
+Password: <input type="text" name="password" value=""><br><br>
+<input name="conn" type="submit" value="Connect">
+<input TYPE="button" name="discon " value="DisConnect" onclick="disconnect()">
+</form>
+</td>
+<td id="subscribe" width="300">
+<form name="subs" action="" onsubmit="return sub_topics()">
+Subscribe Topic:   <input type="text" name="Stopic"><br>
+Subscribe QOS:   <input type="text" name="sqos" value="0"><br>
+<input type="submit" value="Subscribe">
+</form> 
+</td>
+<td id="publish" width="300">
+<form name="smessage" action="" onsubmit="return send_message()">
+
+Message: <input type="text" name="message"><br><br>
+Publish Topic:   <input type="text" name="Ptopic"><br><br>
+Publish QOS:   <input type="text" name="pqos" value="0"><br>
+Retain Message:   <input type="checkbox" name="retain" value="true" ><br>
+<input type="submit" value="Submit">
+</form>
+</td>
+</tr>
+</table>
+Status Messages:
+<div id="status_messages">
 </div>
+Received Messages:
 
+<div id="out_messages">
+</div>
+<script>
+var connected_flag=0	
+var mqtt;
+var reconnectTimeout = 2000;
+var host="192.168.1.157";
+var port=9001;
+var row=0;
+var out_msg="";
+var mcount=0;
+</script>
+
+c
 <?php require_once $abs_us_root.$us_url_root.'users/includes/html_footer.php'; ?>
