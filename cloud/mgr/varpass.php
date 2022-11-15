@@ -13,7 +13,7 @@
 
         var vars = JSON.parse(this.responseText);
 
-        Object.keys(vars).foreach(function(key) {
+        Object.keys(vars).forEach(function(key) {
             console.log('Key : ' + key + ', Value : ' + vars[key]);
         }
         );
