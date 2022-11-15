@@ -45,7 +45,9 @@ function procmsg($topic, $msg){
     echo "Msg Recieved: $msg\n";
   }
 
-if ($mqtt->connect(true, NULL, $url['user'], $url['pass'])) {
+$topic = "testtopic";
+
+if ($mqtt->connect(true,NULL,$username,$password)) {
     $topics[$topic] = array(
         "qos" => 0,
         "function" => "procmsg"
