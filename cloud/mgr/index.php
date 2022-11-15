@@ -24,7 +24,7 @@ if (!securePage($_SERVER['PHP_SELF'])) {
 }
 ?>
 
-
+a
 <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.2/mqttws31.js">
 
 // Create a client instance: Broker, Port, Websocket Path, Client ID
@@ -76,7 +76,7 @@ client.subscribe("testtopic");
 
 </script>
 
-
+b
 
 <div class="row">
 	<div class="col-sm-12">
