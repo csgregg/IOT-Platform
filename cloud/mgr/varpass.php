@@ -24,7 +24,7 @@
         
             // Split JSON and load into local variables
             Object.keys(vars).forEach( function(key) { window[key] = vars[key]; } );
-            console.log( key . " = " . vars[key] );
+            console.log( key + " = " + vars[key] );
         } else {
             console.log("Not logged in");
         }
