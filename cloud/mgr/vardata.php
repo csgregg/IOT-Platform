@@ -1,22 +1,17 @@
 <?php
+// Secure to only logged in users
 require_once '../users/init.php';
-if (!securePage($_SERVER['PHP_SELF'])) {
-    die();
-}
+if (!securePage($_SERVER['PHP_SELF'])) { die(); }
 
- $host = "myhost.com";
- $pwd = "password";
+// Variables to pass
+$host = "myhost.com";
+$pwd = "password";
 
- $vars = array(
-    "host"=>$host,
-    "pwd"=>$pwd
- );
+// Add them all to the array
+$vars = array(
+"host"=>$host,
+"pwd"=>$pwd
+);
 
-echo json_encode($vars); // In the end, you need to echo the result.
-                      // All data should be json_encode()d.
-
-                      // You can json_encode() any value in PHP, arrays, strings,
-                      //even objects.
-
-                      
+echo json_encode($vars);             
 ?>
