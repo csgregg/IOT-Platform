@@ -31,12 +31,8 @@ oReq.onload = function() {
     }
 }
 
-try {
-    oReq.open("get", "vasrdata.php", true);
-    //                               ^ Don't block the rest of the execution.
-    //                                 Don't wait until the request finishes to
-    //                                 continue.
-    oReq.send();
-} catch (e) {
-    console.log("No vars");
-}
+oReq.open("get", "vardata.php", true);
+//                               ^ Don't block the rest of the execution.
+//                                 Don't wait until the request finishes to
+//                                 continue.
+oReq.send();
