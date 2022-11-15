@@ -33,7 +33,7 @@ echo "One
 $mqtt = new bluerhinos\phpMQTT("9840f44798c7434ab5fea3ff5c993221.s2.eu.hivemq.cloud", 8333, "ClientID".rand(), "server.pem");
 echo "Two
 ";
-//if ($mqtt->connect(true,NULL,"testtest","TestTest1")) {
+if ($mqtt->connect(true,NULL,"testtest","TestTest1")) {
     echo "Three
 ";
   $mqtt->publish("topic","Hello CloudAMQP MQTT!", 0);
@@ -45,7 +45,7 @@ echo "Two
 //}else{
   echo "Fail or time out
 ";
-//}
+}
 echo "Six
 ";
 ?>
