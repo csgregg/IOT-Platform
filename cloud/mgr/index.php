@@ -24,59 +24,6 @@ if (!securePage($_SERVER['PHP_SELF'])) {
 }
 ?>
 
-a
-<script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.2/mqttws31.js">
-console.log("Hi");
-// Create a client instance: Broker, Port, Websocket Path, Client ID
-client = new Paho.MQTT.Client("9840f44798c7434ab5fea3ff5c993221.s2.eu.hivemq.cloud", Number(8884), "clientId-12032470912",);
-
-// set callback handlers
-client.onConnectionLost = function (responseObject) {
-    console.log("Connection Lost: "+responseObject.errorMessage);
-}
-
-client.onMessageArrived = function (message) {
-  console.log("Message Arrived: " + message.payloadString);
-  console.log(“Topic:     “ + message.destinationName);
-  console.log(“QoS:       “ + message.qos);
-  console.log(“Retained:  “ + message.retained);
-  // Read Only, set if message might be a duplicate sent from broker
-  console.log(“Duplicate: “ + message.duplicate);
-}
-
-// Called when the connection is made
-function onConnect(){
-	console.log(“Connected!”);
-}
-
-
-client.tls_set("isrgrootx1.pem", tls_version=ssl.PROTOCOL_TLSv1_2)
-client.tls_insecure_set(True)
-
-
-
-// Connect the client, providing an onConnect callback
-var options = {
-        useSSL: true,
-        userName : "testtest",
-        password : TestTest1",
-        onSuccess: onConnect,
-        onFailure: onFail
-    };
-client.connect(options);
-
-
-
-client.subscribe("testtopic");
-
-
-
-
-
-
-</script>
-
-b
 
 <div class="row">
 	<div class="col-sm-12">
