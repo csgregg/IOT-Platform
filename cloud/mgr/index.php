@@ -24,10 +24,12 @@ if (!securePage($_SERVER['PHP_SELF'])) {
 }
 
 ?>
-a
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.js" type="text/javascript"></script>
+
 <script src="<?=$us_url_root?>core/varpasser.js" type="text/javascript"></script>
 <script src="<?=$us_url_root?>core/mqtt.js" type="text/javascript"></script>
-b
+
 <h1>Websockets MQTT Monitor</h1>
 	
     <script type = "text/javascript">
