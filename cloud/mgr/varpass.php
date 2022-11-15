@@ -19,7 +19,7 @@
         );
 
         alert(); // Will alert: 42
-        alert(this.responseTest[]);
+        alert(this.responseTest);
     };
     oReq.open("get", "vardata.php", true);
     //                               ^ Don't block the rest of the execution.
