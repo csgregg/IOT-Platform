@@ -62,7 +62,8 @@ function MQTTconnect() {
     user_name = hivemq_user;
     password = hivemq_pwd;
 
-    console.log("Connecting to "+ host +" "+ port +" Clean session="+clean_sessions +" with user "+user_name);
+    console.log("connecting to "+ host +" "+ port +" clean session="+clean_sessions);
+    console.log("user "+user_name);
 
     document.getElementById("status_messages").innerHTML='connecting';
     var x=Math.floor(Math.random() * 10000); 
