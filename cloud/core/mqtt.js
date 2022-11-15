@@ -68,7 +68,7 @@ function MQTTconnect() {
     document.getElementById("status_messages").innerHTML='connecting';
     var x=Math.floor(Math.random() * 10000); 
     var cname="orderform-"+x;
-    console.log("1");
+
     mqtt = new Paho.MQTT.Client(host,port,cname);
     //document.write("connecting to "+ host);
     var options = {
@@ -78,16 +78,16 @@ function MQTTconnect() {
         onFailure: onFailure,
         useSSL: true,
     };
-    console.log("1aa");
+
     if (user_name !="")
         options.userName=hivemq_user;
     if (password !="")
         options.password=hivemq_pwd;
-    console.log("2");
+
     mqtt.onConnectionLost = onConnectionLost;
     mqtt.onMessageArrived = onMessageArrived;
     mqtt.onConnected = onConnected;
-    console.log("3");
+
     mqtt.connect(options);
     return false;
 }
