@@ -31,7 +31,7 @@ oReq.onload = function() {
     }
 }
 
-oReq.open("get", "vardata.php", true);
+oReq.open("get", "secrets.php", true);
 //                               ^ Don't block the rest of the execution.
 //                                 Don't wait until the request finishes to
 //                                 continue.
