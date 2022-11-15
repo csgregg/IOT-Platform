@@ -29,7 +29,7 @@ require("phpMQTT.php");
 
 
 //MQTT client id to use for the device. "" will generate a client id automatically
-$mqtt = new bluerhinos\phpMQTT("9840f44798c7434ab5fea3ff5c993221.s2.eu.hivemq.cloud", 8884, "ClientID".rand(), "server.crt");
+$mqtt = new bluerhinos\phpMQTT("9840f44798c7434ab5fea3ff5c993221.s2.eu.hivemq.cloud", 8883, "ClientID".rand(), "server.crt");
 
 if ($mqtt->connect(true,NULL,"testtest","TestTest1")) {
   $mqtt->publish("topic","Hello CloudAMQP MQTT!", 0);
