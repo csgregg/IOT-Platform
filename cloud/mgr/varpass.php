@@ -15,10 +15,11 @@
 
         Object.keys(vars).forEach(function(key) {
             console.log('Key : ' + key + ', Value : ' + vars[key]);
+            window[key] = vars[key];
         }
         );
 
-        alert(); // Will alert: 42
+        alert(host);
         alert(this.responseTest);
     };
     oReq.open("get", "vardata.php", true);
