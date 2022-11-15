@@ -8,8 +8,6 @@ require_once($abs_us_root.$us_url_root.'users/includes/template/header1_must_inc
 <script src="<?=$us_url_root?>users/js/jquery.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js" crossorigin="anonymous"></script>
 
-<script src="<?=$us_url_root?>core/varpasser.js" type="text/javascript"></script>
-
 <script src="<?=$us_url_root?>usersc/templates/<?=$settings->template?>/assets/js/bootstrap.min.js" type="text/javascript"></script>
 
 <link href="<?=$us_url_root?>usersc/templates/<?=$settings->template?>/assets/css/hamburgers.min.css" rel="stylesheet">

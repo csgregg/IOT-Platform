@@ -25,6 +25,9 @@ if (!securePage($_SERVER['PHP_SELF'])) {
 
 ?>
 
+<script src="<?=$us_url_root?>core/varpasser.js" type="text/javascript"></script>
+
+
 <div class="row">
 	<div class="col-sm-12">
 	</div>
