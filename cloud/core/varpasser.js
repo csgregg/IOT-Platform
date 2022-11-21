@@ -23,6 +23,7 @@ oReq.onload = function() {
         // Split JSON and load into local variables
         Object.keys(vars).forEach( function(key) {
             window[key] = vars[key];
+            console.log(key);
         } );
 
     } else {
@@ -30,7 +31,7 @@ oReq.onload = function() {
     }
 }
 
-oReq.open("get", "secrets.php", true);
+oReq.open("get", "secrets/private/secrets.php", true);
 //                               ^ Don't block the rest of the execution.
 //                                 Don't wait until the request finishes to
 //                                 continue.

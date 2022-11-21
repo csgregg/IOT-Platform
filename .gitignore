@@ -2,3 +2,5 @@
 cloud/users/init.php
 
 .DS_Store
+
+cloud/*/secrets/private
