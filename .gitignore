@@ -1,6 +1,6 @@
 # UserSpice ini file
-cloud/users/init.php
+htdocs/users/init.php
 
 .DS_Store
 
-cloud/*/secrets/private
+htdocs/*/secrets/private
