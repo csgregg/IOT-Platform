@@ -30,36 +30,80 @@ if (!securePage($_SERVER['PHP_SELF'])) {
 <script src="<?=$us_url_root?>core/varpasser.js" type="text/javascript"></script>
 <script src="<?=$us_url_root?>core/mqtt.js" type="text/javascript"></script>
 
-<h1>Websockets MQTT Monitor</h1>
-	
-    <script type = "text/javascript">
-//ll
+<script type="text/javascript">
+
+    window.addEventListener("load", function() {
+        MQTTConnect();
+    });
+
+    window.addEventListener("beforeunload", function(evt) {
+        MQTTDisconnect();
+
+        // Cancel the event (if necessary)
+        evt.preventDefault();
+
+        // Google Chrome requires returnValue to be set
+        evt.returnValue = '';
+
+        return null;
+    });
 
 </script>
 
-
+<h1>Device Manager</h1>
 <div id="status">Connection Status: Not Connected</div>
+
+<br>
+
+
+<style>
+table.devicelist {
+  width: 100%;
+  background-color: #FFFFFF;
+  border-collapse: collapse;
+  border-width: 0px;
+  border-color: #FFFFFF;
+  border-style: solid;
+  color: #000000;
+}
+
+table.devicelist td, table.devicelist th {
+  border-width: 0px;
+  border-color: #FFFFFF;
+  border-style: solid;
+  padding: 5px;
+}
+
+table.devicelist thead {
+  background-color: #FFFFFF;
+}
+</style>
+
+<table id="devicelist" class="devicelist">
+  <tbody>
+    <tr>
+      <td>Row 1, Cell 1</td>
+      <td>Row 1, Cell 2</td>
+      <td>Row 1, Cell 3</td>
+    </tr>
+  </tbody>
+</table>
+
+
+
 
 <br>
 <table>
 <tr>
-
-<td id="connect" width="300" >
-
-<form name="connform" action="" onsubmit="return MQTTconnect()">
-<input name="conn" type="submit" value="Connect">
-<input TYPE="button" name="discon " value="DisConnect" onclick="disconnect()">
-</form>
-</td>
 <td id="subscribe" width="300">
-<form name="subs" action="" onsubmit="return sub_topics()">
+<form name="subs" action="" onsubmit="return MQTTSubTopic()">
 Subscribe Topic:   <input type="text" name="Stopic"><br>
 Subscribe QOS:   <input type="text" name="sqos" value="0"><br>
 <input type="submit" value="Subscribe">
 </form> 
 </td>
 <td id="publish" width="300">
-<form name="smessage" action="" onsubmit="return send_message()">
+<form name="smessage" action="" onsubmit="return MQTTSendMessage()">
 
 Message: <input type="text" name="message"><br><br>
 Publish Topic:   <input type="text" name="Ptopic"><br><br>
@@ -70,22 +114,10 @@ Retain Message:   <input type="checkbox" name="retain" value="true" ><br>
 </td>
 </tr>
 </table>
-Status Messages:
-<div id="status_messages">
-</div>
+<br>
 Received Messages:
-
 <div id="out_messages">
 </div>
-<script>
-var connected_flag=0	
-var mqtt;
-var reconnectTimeout = 2000;
-var host="192.168.1.157";
-var port=9001;
-var row=0;
-var out_msg="";
-var mcount=0;
-</script>
-ads
+
+
 <?php require_once $abs_us_root.$us_url_root.'users/includes/html_footer.php'; ?>

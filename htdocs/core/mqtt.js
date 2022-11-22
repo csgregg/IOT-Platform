@@ -1,22 +1,29 @@
+var connected_flag=0	
+var mqtt;
+var reconnectTimeout = 2000;
+var host="";
+var port=0;
+var row=0;
+var out_msg="";
+var mcount=0;
 
-function onConnectionLost(){
-    console.log("connection lost");
+
+function onMQTTConnectionLost(){
+    console.log("MQTT Connection Lost");
     document.getElementById("status").innerHTML = "Connection Lost";
-    document.getElementById("status_messages").innerHTML ="Connection Lost";
     connected_flag=0;
 }
 
-function onFailure(message) {
-        console.log("Failed");
-        document.getElementById("status_messages").innerHTML = "Connection Failed- Retrying";
-        setTimeout(MQTTconnect, reconnectTimeout);
+function onMQTTConnectionFailure(message) {
+    console.log("MQTT Failure - Retrying");
+    setTimeout(MQTTConnect, reconnectTimeout);
 }
 
-function onMessageArrived(r_message){
+function onMQTTMessageArrived(r_message){
     out_msg="Message received "+r_message.payloadString;
     out_msg=out_msg+"      Topic "+r_message.destinationName +"<br/>";
     out_msg="<b>"+out_msg+"</b>";
-    //console.log(out_msg+row);
+
     try{
         document.getElementById("out_messages").innerHTML+=out_msg;
     }
@@ -32,39 +39,37 @@ function onMessageArrived(r_message){
         row+=1;
         
     mcount+=1;
-    console.log(mcount+"  "+row);
 }
             
-function onConnected(recon,url){
-    console.log(" in onConnected " +reconn);
+function onMQTTConnected(recon,url){
+    console.log(" in onMQTTConnected " + recon);
 }
 
-function onConnect() {
+function onMQTTConnectionSuccess() {
     // Once a connection has been made, make a subscription and send a message.
-    document.getElementById("status_messages").innerHTML ="Connected to "+host +"on port "+port;
     connected_flag=1;
     document.getElementById("status").innerHTML = "Connected";
-    console.log("on Connect "+connected_flag);
+    console.log("Connected to MQTT Broker : " + host + " on port " + port);
 }
 
-function disconnect(){
-    if (connected_flag==1)
+function MQTTDisconnect(){
+    if (connected_flag==1) {
+        console.log("Disconnecting from MQTT Broker : " + host);
         mqtt.disconnect();
+    }
 }
     
-function MQTTconnect() {
+function MQTTConnect() {
 
     var clean_sessions=true;
-    document.getElementById("status_messages").innerHTML ="";
 
     host = hivemq_host;
     port = parseInt(hivemq_port);
     user_name = hivemq_user;
     password = hivemq_pwd;
 
-    console.log("Connecting to "+ host +" "+ port +" Clean session="+clean_sessions);
+    console.log("Connecting to MQTT Broker : " + host + " on port " + port + " with Clean Session = " + clean_sessions);
 
-    document.getElementById("status_messages").innerHTML='connecting';
     var x=Math.floor(Math.random() * 10000); 
     var cname="orderform-"+x;
 
@@ -73,8 +78,8 @@ function MQTTconnect() {
     var options = {
         timeout: 3,
         cleanSession: clean_sessions,
-        onSuccess: onConnect,
-        onFailure: onFailure,
+        onSuccess: onMQTTConnectionSuccess,
+        onFailure: onMQTTConnectionFailure,
         useSSL: true,
     };
 
@@ -83,30 +88,28 @@ function MQTTconnect() {
     if (password !="")
         options.password=hivemq_pwd;
 
-    mqtt.onConnectionLost = onConnectionLost;
-    mqtt.onMessageArrived = onMessageArrived;
-    mqtt.onConnected = onConnected;
+    mqtt.onConnectionLost = onMQTTConnectionLost;
+    mqtt.onMessageArrived = onMQTTMessageArrived;
+    mqtt.onConnected = onMQTTConnected;
 
     mqtt.connect(options);
     return false;
 }
 
 
-function sub_topics(){
-    document.getElementById("status_messages").innerHTML ="";
+function MQTTSubTopic(){
+
     if (connected_flag==0){
-    out_msg="<b>Not Connected so can't subscribe</b>"
-    console.log(out_msg);
-    document.getElementById("status_messages").innerHTML = out_msg;
-    return false;
+        console.log("Not Connected to MQTT Broker so can't subscribe");
+        return false;
     }
     var stopic= document.forms["subs"]["Stopic"].value;
-    console.log("here");
+
     var sqos=parseInt(document.forms["subs"]["sqos"].value);
     if (sqos>2)
         sqos=0;
-    console.log("Subscribing to topic ="+stopic +" QOS " +sqos);
-    document.getElementById("status_messages").innerHTML = "Subscribing to topic ="+stopic;
+    console.log("Subscribing to MQTT topic = " + stopic + " QOS " + sqos);
+
     var soptions={
     qos:sqos,
     };
@@ -114,20 +117,16 @@ function sub_topics(){
     return false;
 }
 
-function send_message(){
-    document.getElementById("status_messages").innerHTML ="";
+function MQTTSendMessage(){
     if (connected_flag==0){
-    out_msg="<b>Not Connected so can't send</b>"
-    console.log(out_msg);
-    document.getElementById("status_messages").innerHTML = out_msg;
-    return false;
+        console.log("Not Connected to MQTT Broker so can't send");
+        return false;
     }
     var pqos=parseInt(document.forms["smessage"]["pqos"].value);
     if (pqos>2)
         pqos=0;
     var msg = document.forms["smessage"]["message"].value;
-    console.log(msg);
-    document.getElementById("status_messages").innerHTML="Sending message  "+msg;
+    console.log("Sending MQTT Message : " + msg);
 
     var topic = document.forms["smessage"]["Ptopic"].value;
     //var retain_message = document.forms["smessage"]["retain"].value;
@@ -147,4 +146,3 @@ function send_message(){
 }
     
         
-    

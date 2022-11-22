@@ -23,16 +23,13 @@ oReq.onload = function() {
         // Split JSON and load into local variables
         Object.keys(vars).forEach( function(key) {
             window[key] = vars[key];
-            console.log(key);
+            console.log("Variable passed to JS : " + key);
         } );
 
     } else {
-        console.log("Not logged in");
+        console.log("Not logged in so can't pass variables to JS");
     }
 }
 
-oReq.open("get", "secrets/private/secrets.php", true);
-//                               ^ Don't block the rest of the execution.
-//                                 Don't wait until the request finishes to
-//                                 continue.
+oReq.open("get", "secrets/private/secrets.php", false);
 oReq.send();
