@@ -87,6 +87,5 @@ var row=0;
 var out_msg="";
 var mcount=0;
 </script>
-
-c
+ads
 <?php require_once $abs_us_root.$us_url_root.'users/includes/html_footer.php'; ?>
