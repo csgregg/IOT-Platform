@@ -26,29 +26,9 @@ if (!securePage($_SERVER['PHP_SELF'])) {
 ?>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.js" type="text/javascript"></script>
-
 <script src="<?=$us_url_root?>core/varpasser.js" type="text/javascript"></script>
-<script src="<?=$us_url_root?>core/mqtt.js" type="text/javascript"></script>
+<script src="mqtt.js" type="text/javascript"></script>
 
-<script type="text/javascript">
-
-    window.addEventListener("load", function() {
-        MQTTConnect();
-    });
-
-    window.addEventListener("beforeunload", function(evt) {
-        MQTTDisconnect();
-
-        // Cancel the event (if necessary)
-        evt.preventDefault();
-
-        // Google Chrome requires returnValue to be set
-        evt.returnValue = '';
-
-        return null;
-    });
-
-</script>
 
 <h1>Device Manager</h1>
 <div id="status">Connection Status: Not Connected</div>
@@ -58,18 +38,17 @@ if (!securePage($_SERVER['PHP_SELF'])) {
 
 <style>
 table.devicelist {
-  width: 100%;
   background-color: #FFFFFF;
   border-collapse: collapse;
-  border-width: 0px;
-  border-color: #FFFFFF;
+  border-width: 1px;
+  border-color: #000000;
   border-style: solid;
   color: #000000;
 }
 
 table.devicelist td, table.devicelist th {
-  border-width: 0px;
-  border-color: #FFFFFF;
+  border-width: 1px;
+  border-color: #000000;
   border-style: solid;
   padding: 5px;
 }
@@ -81,10 +60,10 @@ table.devicelist thead {
 
 <table id="devicelist" class="devicelist">
   <tbody>
-    <tr>
-      <td>Row 1, Cell 1</td>
-      <td>Row 1, Cell 2</td>
-      <td>Row 1, Cell 3</td>
+    <thead>
+      <td>Device</td>
+      <td>ID</td>
+      <td>Status</td>
     </tr>
   </tbody>
 </table>
@@ -96,14 +75,14 @@ table.devicelist thead {
 <table>
 <tr>
 <td id="subscribe" width="300">
-<form name="subs" action="" onsubmit="return MQTTSubTopic()">
+<form name="subs" action="" onsubmit="return MQTTSubTopic(document.forms['subs']['Stopic'].value,parseInt(document.forms['subs']['sqos'].value),handlerStatusMessage);">
 Subscribe Topic:   <input type="text" name="Stopic"><br>
 Subscribe QOS:   <input type="text" name="sqos" value="0"><br>
 <input type="submit" value="Subscribe">
 </form> 
 </td>
 <td id="publish" width="300">
-<form name="smessage" action="" onsubmit="return MQTTSendMessage()">
+<form name="smessage" action="" onsubmit="return MQTTSendMessage(document.forms['smessage']['message'].value,parseInt(document.forms['smessage']['pqos'].value),document.forms['smessage']['Ptopic'].value,document.forms['smessage']['retain'].checked);">
 
 Message: <input type="text" name="message"><br><br>
 Publish Topic:   <input type="text" name="Ptopic"><br><br>

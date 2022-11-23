@@ -1,0 +1,284 @@
+
+
+
+var connected_flag=0	
+var mqtt;
+var reconnectTimeout = 2000;
+var host="";
+var port=0;
+var row=0;
+var out_msg="";
+var mcount=0;
+var statusBar;
+var messageBar;
+
+var subscriptions = [];
+var devices = [];
+
+
+/**
+ * Return a boolean indicating whether the topic filter the topic.
+ * @param {string} topicFilter
+ * @param {string} topic
+ */
+ function topicMatchesTopicFilter(topicFilter, topic) {
+
+    // convert topic filter to a regex and see if the incoming topic matches it
+    topicFilterRegex = convertMqttTopicFilterToRegex(topicFilter);
+    match = topic.match(topicFilterRegex);
+
+    // if the match index starts at 0, the topic matches the topic filter
+    if (match && match.index == 0) {
+
+      // guard: check edge case where the pattern is a match but the last character is *
+      if (topicFilterRegex.lastIndexOf("*") == topic.length - 1) {
+        // if the number of topic sections are not equal, the match is a false positive
+        if (topicFilterRegex.split("/").length != topic.split("/").length) {
+          return false;
+        }
+     }
+      // if no edge case guards return early, the match is genuine
+      return true;
+
+    }
+  
+    // else the match object is empty, and the topic is not a match with the topic filter
+    else {
+      return false;
+   }
+}
+  
+/**
+ * Convert MQTT topic filter wildcards and system symbols into regex
+ * Useful resource for learning: https://regexr.com/
+ * @param {string} topicFilter
+ */
+function convertMqttTopicFilterToRegex(topicFilter) {
+    // convert single-level wildcard + to .*, or "any character, zero or more repetitions"
+    topicFilterRegex = topicFilter.replace(/\+/g, ".*").replace(/\$/g, ".*");
+    // convert multi-level wildcard # to .* if it is in a valid position in the topic filter
+    if (topicFilter.lastIndexOf("#") == topicFilter.length - 1) {
+        topicFilterRegex = topicFilterRegex
+        .substring(0, topicFilterRegex.length - 1)
+        .concat(".*");
+    }
+    // convert system symbol $ to .
+
+    return topicFilterRegex;
+}
+
+function setMQTTBars(s_bar,m_bar){
+    statusBar = s_bar;
+    messageBar = m_bar;
+}
+
+function onMQTTConnectionLost(){
+    console.log("MQTT Connection Lost");
+    document.getElementById(statusBar).innerHTML = "Connection Lost";
+    connected_flag=0;
+}
+
+function onMQTTConnectionFailure(message) {
+    console.log("MQTT Failure : " + message + " - Retrying");
+    setTimeout(MQTTConnect, reconnectTimeout);
+}
+
+
+
+function handlerKnownDevice( topic, msg ) {
+
+    var table = document.getElementById("devicelist");
+    const topicparts = topic.split("/");
+
+    var found = null;
+    for (const row of table.rows) {  
+          if(row.cells[0].innerText == topicparts[1] && row.cells[1].innerText == topicparts[2]) found = row;
+    }
+
+    if( found == null) {
+        var rowCount = table.rows.length;
+        found = table.insertRow(rowCount);
+    
+        found.insertCell(0);
+        found.insertCell(1);
+        found.insertCell(2);
+
+        const topicparts = topic.split("/");
+
+        found.cells[0].innerHTML = topicparts[1];
+        found.cells[1].innerHTML = topicparts[2];
+    }
+
+    found.cells[2].innerHTML = msg;
+
+}
+
+function handlerStatusMessage( topic, msg ) {
+    out_msg="Message received "+msg;
+    out_msg=out_msg+"      Topic "+topic +"<br/>";
+    out_msg="<b>"+out_msg+"</b>";
+
+    try{
+        document.getElementById(messageBar).innerHTML+=out_msg;
+    }
+    catch(err){
+        document.getElementById(messageBar).innerHTML=err.message;
+    }
+
+    if (row==10){
+        row=1;
+        document.getElementById(messageBar).innerHTML=out_msg;
+        }
+    else
+        row+=1;
+        
+    mcount+=1;
+}
+
+function onMQTTMessageArrived(r_message){
+
+    subscriptions.forEach( sub => { 
+        if( topicMatchesTopicFilter(sub.topic,r_message.destinationName) )
+            sub.handler(r_message.destinationName,r_message.payloadString);
+        }
+    );
+}
+            
+function onMQTTConnected(recon,url){
+    console.log(" in onMQTTConnected " + recon);
+}
+
+function onMQTTConnectionSuccess() {
+    // Once a connection has been made, make a subscription and send a message.
+    connected_flag=1;
+    document.getElementById(statusBar).innerHTML = "Connected";
+    console.log("Connected to MQTT Broker : " + host + " on port " + port);
+
+    MQTTSubTopic("devices/+/+/status",0,handlerKnownDevice);
+}
+
+function MQTTDisconnect(){
+    if (connected_flag==1) {
+        console.log("Disconnecting from MQTT Broker : " + host);
+        mqtt.disconnect();
+    }
+}
+    
+function MQTTConnect() {
+
+    var clean_sessions=true;
+
+    host = hivemq_host;
+    port = parseInt(hivemq_port);
+    user_name = hivemq_user;
+    password = hivemq_pwd;
+
+    console.log("Connecting to MQTT Broker : " + host + " on port " + port + " with Clean Session = " + clean_sessions);
+
+    var x=Math.floor(Math.random() * 10000); 
+    var cname="orderform-"+x;
+
+    mqtt = new Paho.MQTT.Client(host,port,cname);
+
+    var options = {
+        timeout: 3,
+        cleanSession: clean_sessions,
+        onSuccess: onMQTTConnectionSuccess,
+        onFailure: onMQTTConnectionFailure,
+        useSSL: true,
+    };
+
+    if (user_name !="")
+        options.userName=hivemq_user;
+    if (password !="")
+        options.password=hivemq_pwd;
+
+    mqtt.onConnectionLost = onMQTTConnectionLost;
+    mqtt.onMessageArrived = onMQTTMessageArrived;
+    mqtt.onConnected = onMQTTConnected;
+
+    mqtt.connect(options);
+    return false;
+}
+
+
+function MQTTSubTopic(stopic,sqos,handler){
+
+    if (connected_flag==0){
+        console.log("Not Connected to MQTT Broker so can't subscribe");
+        return false;
+    }
+
+    if (sqos>2) sqos=0;
+
+    console.log("Subscribing to MQTT topic = " + stopic + " QOS " + sqos);
+
+    var soptions={
+        qos:sqos,
+    };
+
+    subscriptions.push(
+        {
+            "topic" : stopic,
+            "sqos" : sqos,
+            "handler" : handler
+        }
+    );
+    console.log(subscriptions);
+
+    mqtt.subscribe(stopic,soptions);
+
+    return false;
+}
+
+function MQTTSendMessage(msg,pqos,topic,retain){
+
+    if (connected_flag==0){
+        console.log("Not Connected to MQTT Broker so can't send");
+        return false;
+    }
+
+    if (pqos>2) pqos=0;
+
+    console.log("Sending MQTT Message : " + msg);
+
+    if (retain)
+        retain_flag=true;
+    else
+        retain_flag=false;
+
+    message = new Paho.MQTT.Message(msg);
+
+    if (topic=="") message.destinationName = "test-topic";
+    else message.destinationName = topic;
+
+    message.qos=pqos;
+    message.retained=retain_flag;
+
+    mqtt.send(message);
+
+    return false;
+}
+
+
+
+
+function loadKnownDevices() {
+    MQTTSubTopic()
+}
+
+    
+setMQTTBars( "status", "out_messages" );
+
+window.addEventListener("load", function() {
+    MQTTConnect();
+
+});
+
+window.addEventListener("beforeunload", function(evt) {
+    MQTTDisconnect();
+    evt.preventDefault();
+    evt.returnValue = '';
+    return null;
+});
+
