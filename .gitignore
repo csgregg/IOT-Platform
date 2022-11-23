@@ -4,3 +4,6 @@ htdocs/users/init.php
 .DS_Store
 
 htdocs/*/secrets/private
+
+users
+usersc

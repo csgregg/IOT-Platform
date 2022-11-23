@@ -131,7 +131,7 @@ function handlerKnownDevice( topic, msg ) {
                     var linkText = document.createTextNode(thisapp.name);
                     applink.appendChild(linkText);
                     applink.title = "Device Application";
-                    applink.href = thisapp.url;
+                    applink.href = thisapp.url + "?deviceID=" + topicparts[2];
                     applink.target = "_blank";
                     found.cells[2].appendChild(applink);
 
