@@ -23,7 +23,7 @@ oReq.onload = function() {
         // Split JSON and load into local variables
         Object.keys(vars).forEach( function(key) {
             window[key] = vars[key];
-            console.log("Variable passed to JS : " + key);
+            // console.log("Variable passed to JS : " + key);
         } );
 
     } else {

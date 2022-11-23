@@ -9,8 +9,6 @@ var port=0;
 var row=0;
 var out_msg="";
 var mcount=0;
-var statusBar;
-var messageBar;
 
 var subscriptions = [];
 var devices = [];
@@ -83,14 +81,10 @@ function convertMqttTopicFilterToRegex(topicFilter) {
     return topicFilterRegex;
 }
 
-function setMQTTBars(s_bar,m_bar){
-    statusBar = s_bar;
-    messageBar = m_bar;
-}
 
 function onMQTTConnectionLost(){
     console.log("MQTT Connection Lost");
-    document.getElementById(statusBar).innerHTML = "Connection Lost";
+    document.getElementById("status").innerHTML = "Connection Lost";
     connected_flag=0;
 }
 
@@ -197,13 +191,13 @@ function onMQTTMessageArrived(r_message){
 }
             
 function onMQTTConnected(recon,url){
-    console.log(" in onMQTTConnected " + recon);
+    // console.log(" in onMQTTConnected " + recon);
 }
 
 function onMQTTConnectionSuccess() {
     // Once a connection has been made, make a subscription and send a message.
     connected_flag=1;
-    document.getElementById(statusBar).innerHTML = "Connected";
+    document.getElementById("status").innerHTML = "Connected";
     console.log("Connected to MQTT Broker : " + host + " on port " + port);
 
     MQTTSubTopic("devices/+/+/status",0,handlerKnownDevice);
@@ -276,7 +270,6 @@ function MQTTSubTopic(stopic,sqos,handler){
             "handler" : handler
         }
     );
-    console.log(subscriptions);
 
     mqtt.subscribe(stopic,soptions);
 
@@ -320,7 +313,7 @@ function loadKnownDevices() {
 }
 
     
-setMQTTBars( "status", "out_messages" );
+
 
 window.addEventListener("load", function() {
     MQTTConnect();

@@ -27,7 +27,7 @@ if (!securePage($_SERVER['PHP_SELF'])) {
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.js" type="text/javascript"></script>
 <script src="<?=$us_url_root?>core/varpasser.js" type="text/javascript"></script>
-<script src="mqtt.js" type="text/javascript"></script>
+<script src="mqtt_tests.js" type="text/javascript"></script>
 
 
 <h1>MQTT Tester</h1>
@@ -39,7 +39,7 @@ if (!securePage($_SERVER['PHP_SELF'])) {
 <table>
 <tr>
 <td id="subscribe" width="300">
-<form name="subs" action="" onsubmit="return MQTTSubTopic(document.forms['subs']['Stopic'].value,parseInt(document.forms['subs']['sqos'].value),handlerStatusMessage);">
+<form name="subs" action="" onsubmit="return MQTTSubTopic(document.forms['subs']['Stopic'].value,parseInt(document.forms['subs']['sqos'].value));">
 Subscribe Topic:   <input type="text" name="Stopic"><br>
 Subscribe QOS:   <input type="text" name="sqos" value="0"><br>
 <input type="submit" value="Subscribe">
