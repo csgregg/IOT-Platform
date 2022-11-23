@@ -15,6 +15,22 @@ var messageBar;
 var subscriptions = [];
 var devices = [];
 
+var deviceTypes = [
+    {
+        "code" : "rota",
+        "name" : "Remote OTA Test",
+        "app" : "rota"
+    }
+];
+
+var applist = [
+    {
+        "code" :  "rota",
+        "name" : "ROTA App",
+        "url" : "../apps/rota"
+    }
+];
+
 
 /**
  * Return a boolean indicating whether the topic filter the topic.
@@ -92,24 +108,60 @@ function handlerKnownDevice( topic, msg ) {
 
     var found = null;
     for (const row of table.rows) {  
-          if(row.cells[0].innerText == topicparts[1] && row.cells[1].innerText == topicparts[2]) found = row;
+          if(row.cells[0].innerText == topic) found = row;
     }
 
-    if( found == null) {
-        var rowCount = table.rows.length;
-        found = table.insertRow(rowCount);
-    
-        found.insertCell(0);
-        found.insertCell(1);
-        found.insertCell(2);
+    if( msg == "" ) {
+        if( found != null ) found.remove();
+    } else
+    {
+        if( found == null) {
+            var rowCount = table.rows.length;
+            found = table.insertRow(rowCount);
+        
+            found.insertCell(0);
+            found.insertCell(1);
+            found.insertCell(2);
+            found.insertCell(3);
 
-        const topicparts = topic.split("/");
+            found.cells[0].innerHTML = topic;
+            found.cells[0].style="display:none;"
 
-        found.cells[0].innerHTML = topicparts[1];
-        found.cells[1].innerHTML = topicparts[2];
+            thisdevice = deviceTypes.find(thisdevice => thisdevice.code === topicparts[1]);
+
+            if( thisdevice !== undefined ){
+                thisapp = applist.find(thisapp => thisapp.code === thisdevice.app);
+                if( thisapp !== undefined)
+                {           
+                    var applink = document.createElement('a');
+                    var linkText = document.createTextNode(thisapp.name);
+                    applink.appendChild(linkText);
+                    applink.title = "Device Application";
+                    applink.href = thisapp.url;
+                    applink.target = "_blank";
+                    found.cells[2].appendChild(applink);
+
+                } else {
+                    found.cells[2].innerHTML = "Unknown App";
+                }
+
+            } else {
+                found.cells[2].innerHTML = "Unknown Device";
+            }
+         
+            found.cells[3].innerHTML = "Device ID : " + topicparts[2];
+
+        }
+
+        if( msg == "Online" )
+        {
+            found.cells[1].innerHTML = "<span class='statusdot' style='background:green'></span>"
+        }
+        else
+        {
+            found.cells[1].innerHTML = "<span class='statusdot' style='background:red'></span>"
+        }
     }
-
-    found.cells[2].innerHTML = msg;
 
 }
 

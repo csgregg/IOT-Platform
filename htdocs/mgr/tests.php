@@ -30,52 +30,37 @@ if (!securePage($_SERVER['PHP_SELF'])) {
 <script src="mqtt.js" type="text/javascript"></script>
 
 
-<h1>Device Manager</h1>
-
+<h1>MQTT Tester</h1>
 <div id="status">Connection Status: Not Connected</div>
+
 <br>
 
+<br>
+<table>
+<tr>
+<td id="subscribe" width="300">
+<form name="subs" action="" onsubmit="return MQTTSubTopic(document.forms['subs']['Stopic'].value,parseInt(document.forms['subs']['sqos'].value),handlerStatusMessage);">
+Subscribe Topic:   <input type="text" name="Stopic"><br>
+Subscribe QOS:   <input type="text" name="sqos" value="0"><br>
+<input type="submit" value="Subscribe">
+</form> 
+</td>
+<td id="publish" width="300">
+<form name="smessage" action="" onsubmit="return MQTTSendMessage(document.forms['smessage']['message'].value,parseInt(document.forms['smessage']['pqos'].value),document.forms['smessage']['Ptopic'].value,document.forms['smessage']['retain'].checked);">
 
-<style>
-
-
-.statusdot {
-  border-radius: 50%;
-  display: inline-block;
-  height: 15px;
-  width: 15px;
-  margin-top: 7px;
-  margin-left: 1px;
-}   
-
-table.devicelist {
-  background-color: #FFFFFF;
-  border-collapse: collapse;
-  border-width: 0px;
-  border-color: #000000;
-  border-style: solid;
-  color: #000000;
-}
-
-table.devicelist td, table.devicelist th {
-  border-width: 0px;
-  border-color: #000000;
-  border-style: solid;
-  padding: 5px;
-}
-
-table.devicelist thead {
-  background-color: #FFFFFF;
-}
-</style>
-<table id="devicelist" class="devicelist">
-  <tr>
-    <td style="display:none;"></td>
-    <td style="width:50px"></td>
-    <td style="width:200px"></td>
-    <td style="width:200px"></td>
-
+Message: <input type="text" name="message"><br><br>
+Publish Topic:   <input type="text" name="Ptopic"><br><br>
+Publish QOS:   <input type="text" name="pqos" value="0"><br>
+Retain Message:   <input type="checkbox" name="retain" value="true" ><br>
+<input type="submit" value="Submit">
+</form>
+</td>
 </tr>
 </table>
+<br>
+Received Messages:
+<div id="out_messages">
+</div>
+
 
 <?php require_once $abs_us_root.$us_url_root.'users/includes/html_footer.php'; ?>
