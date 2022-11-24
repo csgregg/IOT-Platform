@@ -2,7 +2,7 @@
  * @file        varpasser.js
  * @author      Chris Gregg
  * 
- * @brief        Retrives and returs variables from secrets file, but protected by UserSpice permissions
+ * @brief       Retrives and returs variables from secrets file, but protected by UserSpice permissions
  * 
  * @copyright   Copyright (c) 2022
  * 
@@ -28,15 +28,36 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. */
 
+/* Format of secrets.php file -
+
+<?php
+// Secure to only logged in users
+require_once '../../../users/init.php';
+if (!securePage($_SERVER['PHP_SELF'])) { die(); }
+ 
+// Variables to pass
+$<<variable name>> = <<variable value>>;
+ 
+// Add them all to the JSON array
+$vars = array(
+  "<<variable name>>"=>$<<variable name>>
+);
+
+// JSON encode and return
+echo json_encode($vars);             
+?>
+
+*/
+
 
 /** @class  Variable Passer
  *  @brief  Retrives and returs variables from secrets file, but protected by UserSpice permissions
- *          
- *          Should be included in any UserSpice controlled pages which need secrets */
+ */
 class varpasser {
 
     /** Construct a new variable passer object
-     * @param filepath          String containing path of secrets file to load */
+     * @param filepath          String containing path of secrets file to load
+     */
     constructor(filepath) {
 
         this.secretsFile = filepath;    // Path of secrets file
@@ -65,7 +86,8 @@ class varpasser {
     }
 
     /** Get value of particular variable 
-     * @param str          String containing name of variable */
+     * @param str          String containing name of variable
+     */
     getSecret(str) {
         if( this.valid )
         {
@@ -77,7 +99,8 @@ class varpasser {
     }
 
     /** Test to see if string is a JSON structure 
-     * @param str          String containing path of secrets file to load */
+     * @param str          String containing path of secrets file to load
+     */
     isJSON(str) {
         try {
             JSON.parse(str);

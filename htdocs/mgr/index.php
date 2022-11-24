@@ -27,7 +27,8 @@ if (!securePage($_SERVER['PHP_SELF'])) {
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.js" type="text/javascript"></script>
 <script src="<?=$us_url_root?>core/varpasser.js" type="text/javascript"></script>
-<script src="mqtt_mgr.js" type="text/javascript"></script>
+<script src="<?=$us_url_root?>core/mqttclient.js" type="text/javascript"></script>
+<script src="mgr.js" type="text/javascript"></script>
 
 
 <h1>Device Manager</h1>
