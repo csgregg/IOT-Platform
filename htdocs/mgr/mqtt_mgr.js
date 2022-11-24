@@ -319,7 +319,7 @@ window.addEventListener("load", function() {
     MQTTConnect();
 
 });
-
+/*
 window.addEventListener("beforeunload", function(evt) {
     MQTTDisconnect();
     evt.preventDefault();
@@ -327,3 +327,4 @@ window.addEventListener("beforeunload", function(evt) {
     return null;
 });
 
+*/
