@@ -1,9 +1,18 @@
 # UserSpice ini file
-htdocs/users/init.php
+# htdocs/users/init.php
 
 .DS_Store
 
+# Keep credentials out of git
 htdocs/*/secrets/private
 
-users
-usersc
+# Don't need to store UserSpice in git
+/htdocs/install
+/htdocs/users
+/htdocs/usersc/includes/*
+/htdocs/usersc/lang/*
+/htdocs/usersc/plugins/*
+/htdocs/usersc/scripts/*
+/htdocs/usersc/widgets/*
+/htdocs/usersc/templates/*
+!/htdocs/usersc/templates/IOT-Platform
