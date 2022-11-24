@@ -5,17 +5,28 @@ if(isset($user) && $user->isLoggedIn()){
 }
 ?>
 
-<div class="jumbotron">
-	<p align="center">
-		<?php
-		if($user->isLoggedIn()){?>
-			<a class="btn btn-primary" href="mgr/" role="button">Device Manager &raquo;</a>
-		<?php }else{?>
-			<a class="btn btn-warning" href="users/login.php" role="button"><?=lang("SIGNIN_TEXT");?> &raquo;</a>
-			<a class="btn btn-info" href="users/join.php" role="button"><?=lang("SIGNUP_TEXT");?> &raquo;</a>
-		<?php }?>
-	</p>
-</div>
+<?php
+if($user->isLoggedIn()){?>
+	<div class="card">
+	<div class="card-header">
+		<i class="fa fa-fw fa-mixcloud"></i> IOT Platform
+	</div>
+	<div class="card-body">
+		<h5 class="card-title">Device Manager</h5>
+		<p class="card-text">Devices and apps</p>
+		<a href="mgr/" class="btn btn-primary">Open &raquo;</a>
+	</div>
+	</div>
+<?php }else{?>
+	<div class="card">
+	<div class="card-header">
+		Welcome
+	</div>
+	<div class="card-body">
+		<a href="users/login.php" class="btn btn-primary">Login &raquo;</a>
+	</div>
+	</div>
+<?php }?>
 
 <!-- Place any per-page javascript here -->
 <?php require_once $abs_us_root . $us_url_root . 'users/includes/html_footer.php'; ?>

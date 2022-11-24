@@ -70,13 +70,8 @@ table.devicelist thead {
 }
 </style>
 <table id="devicelist" class="devicelist">
-  <tr>
-    <td style="display:none;"></td>
-    <td style="width:50px"></td>
-    <td style="width:200px"></td>
-    <td style="width:200px"></td>
-
-</tr>
+  <tbody>
+    </tbody
 </table>
 
 <?php require_once $abs_us_root.$us_url_root.'users/includes/html_footer.php'; ?>

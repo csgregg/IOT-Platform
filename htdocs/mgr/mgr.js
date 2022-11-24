@@ -20,6 +20,56 @@ var applist = [
     }
 ];
 
+// Array of knows devices
+var devices = [];
+
+
+
+function updateDeviceList() {
+    var table = document.getElementById("devicelist");
+
+    devices.forEach(function(dev, index) {
+
+        var rowCount = table.rows.length;
+
+        // Add table row if not enough
+        if( index >= rowCount ) {
+            var newRow = table.insertRow(rowCount);
+            newRow.insertCell(0);
+            newRow.insertCell(1);
+            newRow.insertCell(2);
+        }
+
+        // Set status
+        if( dev.status ) table.rows[index].cells[0].innerHTML = "<span class='statusdot' style='background:green'></span>"
+        else table.rows[index].cells[0].innerHTML = "<span class='statusdot' style='background:red'></span>"
+
+        // Retrive and set app
+        var thisapp = applist.find(thisapp => thisapp.code === dev.app);
+        var applink = document.createElement('a');
+        var linkText = document.createTextNode(thisapp.name);
+        applink.appendChild(linkText);
+        applink.title = "Device Application";
+        applink.href = thisapp.url + "?deviceID=" + dev.id;
+        applink.target = "_blank";
+
+        // Remove old link and add new one
+        while (table.rows[index].cells[1].firstChild) {
+            table.rows[index].cells[1].removeChild(table.rows[index].cells[1].firstChild);
+        }
+        table.rows[index].cells[1].appendChild(applink);
+
+        // Set device id
+        table.rows[index].cells[2].innerHTML = "Device ID : " + dev.id;
+
+    });
+
+    // Remove any extra table rows
+    for( var extrarows = table.rows.length - devices.length; table.rows.length - devices.length > 0; table.deleteRow(table.rows.length-1) ){}
+
+}
+
+
 
 /**
  * Called when matching status topic found for a device
@@ -28,66 +78,74 @@ var applist = [
  */
 function handlerKnownDevice( topic, msg ) {
 
-    var table = document.getElementById("devicelist");
+  //  var table = document.getElementById("devicelist");
+
     const topicparts = topic.split("/");
+    var code = topicparts[1];
+    var id = topicparts[2]
+    var online = msg.toLowerCase() == "online";
 
-    var found = null;
-    for (const row of table.rows) {  
-          if(row.cells[0].innerText == topic) found = row;
-    }
+    // Do we already know about this one?
+    var devfound = devices.findIndex(devfound => devfound.statustopic === topic);
 
-    if( msg == "" ) {
-        if( found != null ) found.remove();
-    } else
-    {
-        if( found == null) {
-            var rowCount = table.rows.length;
-            found = table.insertRow(rowCount);
-        
-            found.insertCell(0);
-            found.insertCell(1);
-            found.insertCell(2);
-            found.insertCell(3);
+    if( msg == "" ){
 
-            found.cells[0].innerHTML = topic;
-            found.cells[0].style="display:none;"
+        // If blank message then forget device
+        if( devfound != -1 ) {
+            devices.splice(devfound, 1);
+   //         table.rows[devfound].remove();
+        }
 
-            thisdevice = deviceTypes.find(thisdevice => thisdevice.code === topicparts[1]);
+    } else {
+        if( devfound == -1 ) {
+            
+            // New device
+            var thisdevice = deviceTypes.find(thisdevice => thisdevice.code === code);
 
-            if( thisdevice !== undefined ){
-                thisapp = applist.find(thisapp => thisapp.code === thisdevice.app);
-                if( thisapp !== undefined)
-                {           
-                    var applink = document.createElement('a');
-                    var linkText = document.createTextNode(thisapp.name);
-                    applink.appendChild(linkText);
-                    applink.title = "Device Application";
-                    applink.href = thisapp.url + "?deviceID=" + topicparts[2];
-                    applink.target = "_blank";
-                    found.cells[2].appendChild(applink);
-
-                } else {
-                    found.cells[2].innerHTML = "Unknown App";
+            devices.push(
+                {
+                    id : id,
+                    status : online,
+                    statustopic : topic,
+                    code : thisdevice.code,
+                    name : thisdevice.name,
+                    app : thisdevice.app
                 }
+            );
 
-            } else {
-                found.cells[2].innerHTML = "Unknown Device";
-            }
-         
-            found.cells[3].innerHTML = "Device ID : " + topicparts[2];
+   /*         var rowCount = table.rows.length;
+            var newRow = table.insertRow(rowCount);
+        
+            newRow.insertCell(0);
+            newRow.insertCell(1);
+            newRow.insertCell(2);
 
-        }
+            if( online ) newRow.cells[0].innerHTML = "<span class='statusdot' style='background:green'></span>";
+            else newRow.cells[0].innerHTML = "<span class='statusdot' style='background:red'></span>";
 
-        if( msg == "Online" )
-        {
-            found.cells[1].innerHTML = "<span class='statusdot' style='background:green'></span>"
+            var thisapp = applist.find(thisapp => thisapp.code === thisdevice.app);
+
+            var applink = document.createElement('a');
+            var linkText = document.createTextNode(thisapp.name);
+            applink.appendChild(linkText);
+            applink.title = "Device Application";
+            applink.href = thisapp.url + "?deviceID=" + id;
+            applink.target = "_blank";
+            newRow.cells[1].appendChild(applink);
+
+            newRow.cells[2].innerHTML = "Device ID : " + id;
+*/
+        } else {
+            // Known device
+            devices[devfound].status = online;
+
+      //      if( online ) table.rows[devfound].cells[0].innerHTML = "<span class='statusdot' style='background:green'></span>";
+      //      else table.rows[devfound].cells[0].innerHTML = "<span class='statusdot' style='background:red'></span>";
         }
-        else
-        {
-            found.cells[1].innerHTML = "<span class='statusdot' style='background:red'></span>"
-        }
+        
     }
 
+    updateDeviceList();
 }
 
 /**
