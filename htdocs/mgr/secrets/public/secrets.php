@@ -8,13 +8,15 @@ $hivemq_host = "";
 $hivemq_port = "";
 $hivemq_user = "";
 $hivemq_pwd = "";
+$hivemq_ssl = "";
  
 // Add them all to the array
 $vars = array(
   "hivemq_host"=>$hivemq_host,
 	"hivemq_port"=>$hivemq_port,
   "hivemq_user"=>$hivemq_user,
-	"hivemq_pwd"=>$hivemq_pwd
+	"hivemq_pwd"=>$hivemq_pwd,
+  "hivemq_ssl"=>$hivemq_ssl
 );
  
 echo json_encode($vars);             
