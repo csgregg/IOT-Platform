@@ -13,4 +13,4 @@ htdocs/*/secrets/private
 /htdocs/usersc/scripts/*
 /htdocs/usersc/widgets/*
 /htdocs/usersc/templates/*
-!/htdocs/usersc/templates/IOT-Platform
+!/htdocs/usersc/templates/IOTPlatform
