@@ -1,3 +1,4 @@
+secrets = new varpasser("secrets/private/secrets.php");
 
 
 
@@ -214,10 +215,10 @@ function MQTTConnect() {
 
     var clean_sessions=true;
 
-    host = hivemq_host;
-    port = parseInt(hivemq_port);
-    user_name = hivemq_user;
-    password = hivemq_pwd;
+    host = secrets.getSecret("hivemq_host");
+    port = parseInt(secrets.getSecret("hivemq_port"));
+    user_name = secrets.getSecret("hivemq_user");
+    password = secrets.getSecret("hivemq_pwd");
 
     console.log("Connecting to MQTT Broker : " + host + " on port " + port + " with Clean Session = " + clean_sessions);
 
@@ -235,9 +236,9 @@ function MQTTConnect() {
     };
 
     if (user_name !="")
-        options.userName=hivemq_user;
+        options.userName = secrets.getSecret("hivemq_user");
     if (password !="")
-        options.password=hivemq_pwd;
+        options.password = secrets.getSecret("hivemq_pwd");
 
     mqtt.onConnectionLost = onMQTTConnectionLost;
     mqtt.onMessageArrived = onMQTTMessageArrived;
@@ -319,12 +320,3 @@ window.addEventListener("load", function() {
     MQTTConnect();
 
 });
-/*
-window.addEventListener("beforeunload", function(evt) {
-    MQTTDisconnect();
-    evt.preventDefault();
-    evt.returnValue = '';
-    return null;
-});
-
-*/
