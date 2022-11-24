@@ -1,6 +1,4 @@
-# UserSpice ini file
-# htdocs/users/init.php
-
+# Windows stuff
 .DS_Store
 
 # Keep credentials out of git
