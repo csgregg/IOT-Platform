@@ -24,49 +24,123 @@ var applist = [
 var devices = [];
 
 
+function deleteDeviceFromList(code,id) {
+    var devicecard = document.getElementById("device-"+code+"-"+id);
+    devicecard.remove();
+}
+
 
 function updateDeviceList() {
-    var table = document.getElementById("devicelist");
+
+    var deviceLister = document.getElementById("device-lister");
+
+    applist.forEach(function(app, index) {
+        var appcontainer = document.getElementById("app-"+app.code);
+
+        if( appcontainer == null ){
+
+            // Create app container
+            var newappcontainer = document.createElement("div");
+            newappcontainer.setAttribute("id","app-"+app.code);
+            newappcontainer.setAttribute("class","container border border-dark pt-3 pl-4 pb-3 pr-4");
+
+
+            var appname = document.createElement("h5");
+            appname.innerHTML = app.name;
+            newappcontainer.appendChild(appname);
+
+            var carddeck = document.createElement("div");
+            carddeck.setAttribute("id","app-"+app.code+"-devices");
+            carddeck.setAttribute("class","card-deck");
+            newappcontainer.appendChild(carddeck);
+
+            deviceLister.appendChild(newappcontainer);
+            deviceLister.appendChild(document.createElement("br"));
+        }
+    });
 
     devices.forEach(function(dev, index) {
 
-        var rowCount = table.rows.length;
-
-        // Add table row if not enough
-        if( index >= rowCount ) {
-            var newRow = table.insertRow(rowCount);
-            newRow.insertCell(0);
-            newRow.insertCell(1);
-            newRow.insertCell(2);
-        }
-
-        // Set status
-        if( dev.status ) table.rows[index].cells[0].innerHTML = "<span class='statusdot' style='background:green'></span>"
-        else table.rows[index].cells[0].innerHTML = "<span class='statusdot' style='background:red'></span>"
-
-        // Retrive and set app
+        var devicecard = document.getElementById("device-"+dev.code+"-"+dev.id);
         var thisapp = applist.find(thisapp => thisapp.code === dev.app);
-        var applink = document.createElement('a');
-        var linkText = document.createTextNode(thisapp.name);
-        applink.appendChild(linkText);
-        applink.title = "Device Application";
-        applink.href = thisapp.url + "?deviceID=" + dev.id;
-        applink.target = "_blank";
 
-        // Remove old link and add new one
-        while (table.rows[index].cells[1].firstChild) {
-            table.rows[index].cells[1].removeChild(table.rows[index].cells[1].firstChild);
+        if( devicecard == null ) {
+
+            // Create device card
+            var newdevicecard = document.createElement("div");
+            newdevicecard.setAttribute("id","device-"+dev.code+"-"+dev.id);
+            newdevicecard.setAttribute("class","card m-2");
+            newdevicecard.setAttribute("style","flex: 0 0 19rem;");
+
+            // Add header
+            var newcardheader = document.createElement("div");
+            newcardheader.setAttribute("class","card-header");
+
+            var devicename = document.createElement("h5");
+            devicename.setAttribute("id","device-"+dev.code+"-"+dev.id+"-name");
+
+            var devicestatusname = document.createElement("div");
+            devicestatusname.setAttribute("class","pull-left");
+
+            // Set status
+            var devicestatus = document.createElement("span");
+            devicestatus.setAttribute("id","device-"+dev.code+"-"+dev.id+"-status");
+            devicestatus.setAttribute("class","statusdot");
+            if( dev.status ) devicestatus.setAttribute("style", "background:green;");
+            else devicestatus.setAttribute("style", "background:red;");
+
+            devicestatusname.appendChild(devicestatus);
+            devicestatusname.innerHTML += "&nbsp;&nbsp;&nbsp;"+dev.name;
+
+            var deviceconf = document.createElement("a");
+            deviceconf.setAttribute("id","device-"+dev.code+"-"+dev.id+"-conf");
+            deviceconf.setAttribute("class","pull-right");
+            deviceconf.setAttribute("href","conf.php?device="+dev.id);
+            deviceconf.setAttribute("target","_blank");
+            deviceconf.innerHTML = "<span class='fa fa-fw fa-cogs' style='color:grey'></span>";
+
+            devicename.appendChild(devicestatusname);
+            devicename.appendChild(deviceconf);
+            newcardheader.appendChild(devicename);
+            newdevicecard.appendChild(newcardheader);
+
+            // Card body
+            var newcardhbody = document.createElement("div");
+            newcardhbody.setAttribute("class","card-body");
+
+            var devicetext = document.createElement("div");
+            devicetext.setAttribute("id","device-"+dev.code+"-"+dev.id+"-details");
+            devicetext.setAttribute("class","card-text");
+            devicetext.innerHTML = "An demo of using ESP8266 with Remote OTA and MQTT for management.";
+         
+            var space = document.createElement("br");
+
+            var applaunch = document.createElement("a");
+            applaunch.setAttribute("id","device-"+dev.code+"-"+dev.id+"-launch");
+            applaunch.setAttribute("class","btn btn-primary");
+            applaunch.setAttribute("href",thisapp.url+"?device="+dev.id);
+            applaunch.setAttribute("target","_blank");
+            applaunch.innerHTML = "Open &raquo;";
+
+            newcardhbody.appendChild(devicetext);
+            newcardhbody.appendChild(space);
+            newcardhbody.appendChild(applaunch);
+            newdevicecard.appendChild(newcardhbody);
+
+            // Add card to deck
+            var appdeck = document.getElementById("app-"+dev.app+"-devices");
+            appdeck.appendChild(newdevicecard);
         }
-        table.rows[index].cells[1].appendChild(applink);
+        else {
 
-        // Set device id
-        table.rows[index].cells[2].innerHTML = "Device ID : " + dev.id;
+            // Update status
+            var updatestatus = document.getElementById("device-"+dev.code+"-"+dev.id+"-status");
 
+            if( dev.status ) updatestatus.setAttribute("style","background:green;");
+            else updatestatus.setAttribute("style","background:red;");
+
+        }
     });
-
-    // Remove any extra table rows
-    for( var extrarows = table.rows.length - devices.length; table.rows.length - devices.length > 0; table.deleteRow(table.rows.length-1) ){}
-
 }
 
 
@@ -93,7 +167,8 @@ function handlerKnownDevice( topic, msg ) {
         // If blank message then forget device
         if( devfound != -1 ) {
             devices.splice(devfound, 1);
-   //         table.rows[devfound].remove();
+
+            deleteDeviceFromList(code,id);
         }
 
     } else {
@@ -112,35 +187,9 @@ function handlerKnownDevice( topic, msg ) {
                     app : thisdevice.app
                 }
             );
-
-   /*         var rowCount = table.rows.length;
-            var newRow = table.insertRow(rowCount);
-        
-            newRow.insertCell(0);
-            newRow.insertCell(1);
-            newRow.insertCell(2);
-
-            if( online ) newRow.cells[0].innerHTML = "<span class='statusdot' style='background:green'></span>";
-            else newRow.cells[0].innerHTML = "<span class='statusdot' style='background:red'></span>";
-
-            var thisapp = applist.find(thisapp => thisapp.code === thisdevice.app);
-
-            var applink = document.createElement('a');
-            var linkText = document.createTextNode(thisapp.name);
-            applink.appendChild(linkText);
-            applink.title = "Device Application";
-            applink.href = thisapp.url + "?deviceID=" + id;
-            applink.target = "_blank";
-            newRow.cells[1].appendChild(applink);
-
-            newRow.cells[2].innerHTML = "Device ID : " + id;
-*/
         } else {
             // Known device
             devices[devfound].status = online;
-
-      //      if( online ) table.rows[devfound].cells[0].innerHTML = "<span class='statusdot' style='background:green'></span>";
-      //      else table.rows[devfound].cells[0].innerHTML = "<span class='statusdot' style='background:red'></span>";
         }
         
     }

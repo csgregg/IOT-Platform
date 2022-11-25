@@ -22,7 +22,6 @@ require_once $abs_us_root.$us_url_root.'users/includes/template/prep.php';
 if (!securePage($_SERVER['PHP_SELF'])) {
     die();
 }
-
 ?>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.js" type="text/javascript"></script>
@@ -30,16 +29,11 @@ if (!securePage($_SERVER['PHP_SELF'])) {
 <script src="<?=$us_url_root?>core/mqttclient.js" type="text/javascript"></script>
 <script src="mgr.js" type="text/javascript"></script>
 
-
 <h1>Device Manager</h1>
-
 <div id="status">Connection Status: Not Connected</div>
 <br>
 
-
 <style>
-
-
 .statusdot {
   border-radius: 50%;
   display: inline-block;
@@ -48,30 +42,8 @@ if (!securePage($_SERVER['PHP_SELF'])) {
   margin-top: 7px;
   margin-left: 1px;
 }   
-
-table.devicelist {
-  background-color: #FFFFFF;
-  border-collapse: collapse;
-  border-width: 0px;
-  border-color: #000000;
-  border-style: solid;
-  color: #000000;
-}
-
-table.devicelist td, table.devicelist th {
-  border-width: 0px;
-  border-color: #000000;
-  border-style: solid;
-  padding: 5px;
-}
-
-table.devicelist thead {
-  background-color: #FFFFFF;
-}
 </style>
-<table id="devicelist" class="devicelist">
-  <tbody>
-    </tbody
-</table>
+
+<div id="device-lister"></div>
 
 <?php require_once $abs_us_root.$us_url_root.'users/includes/html_footer.php'; ?>
