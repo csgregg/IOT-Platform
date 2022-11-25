@@ -14,14 +14,35 @@ var deviceTypes = [
 // Array of installed apps
 var applist = [
     {
-        "code"  : "rota",
-        "name"  : "ROTA App",
-        "url"   : "../apps/rota"
+        "code"      : "rota",
+        "name"      : "ROTA App",
+        "url"       : "../apps/rota",
+        "latest"    : "10.3.2",
+        "fw"        : "/bin/fw.bin",
+        "fs"        : "/bin/fs.bin"
     }
 ];
 
-// Array of knows devices
+// Array of knowns devices
 var devices = [];
+
+
+function handlernDeviceEnv( topic, msg ) {
+    console.log(topic);
+    console.log(msg);
+
+    // Device details
+    const topicparts = topic.split("/");
+    var code = topicparts[1];
+    var id = topicparts[2]
+
+    var thisdevice = devices.find(thisdevice => (thisdevice.code === code) && (thisdevice.id === id));
+
+    if( topicparts[4] == "hwd" )thisdevice.hardware = msg;
+    if( topicparts[4] == "rel" )thisdevice.release = msg;
+    if( topicparts[4] == "bld" )thisdevice.build = msg;
+
+}
 
 
 function deleteDeviceFromList(code,id) {
@@ -130,6 +151,10 @@ function updateDeviceList() {
             // Add card to deck
             var appdeck = document.getElementById("app-"+dev.app+"-devices");
             appdeck.appendChild(newdevicecard);
+
+            // Now subscribe to device env
+            MQTTSubTopic("devices/"+dev.code+"/"+dev.id+"/env/#", 0, handlernDeviceEnv );
+
         }
         else {
 
@@ -145,6 +170,7 @@ function updateDeviceList() {
 
 
 
+
 /**
  * Called when matching status topic found for a device
  * @param {string} topic            Received topic
@@ -152,8 +178,7 @@ function updateDeviceList() {
  */
 function handlerKnownDevice( topic, msg ) {
 
-  //  var table = document.getElementById("devicelist");
-
+    // Device details
     const topicparts = topic.split("/");
     var code = topicparts[1];
     var id = topicparts[2]
@@ -184,7 +209,10 @@ function handlerKnownDevice( topic, msg ) {
                     statustopic : topic,
                     code : thisdevice.code,
                     name : thisdevice.name,
-                    app : thisdevice.app
+                    app : thisdevice.app,
+                    hardware : "",
+                    release : "",
+                    build : ""
                 }
             );
         } else {
