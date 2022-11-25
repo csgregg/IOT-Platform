@@ -1,0 +1,9 @@
+
+.statusdot {
+  border-radius: 50%;
+  display: inline-block;
+  height: 15px;
+  width: 15px;
+  margin-top: 7px;
+  margin-left: 1px;
+}   

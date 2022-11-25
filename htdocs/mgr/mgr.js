@@ -1,5 +1,5 @@
 // Load secrets
-secrets = new varpasser("secrets/private/secrets.php");
+secrets = new varpasser("../core/secrets/private/secrets.php");
 
 // Array of device tyoes
 var deviceTypes = [
@@ -28,8 +28,6 @@ var devices = [];
 
 
 function handlernDeviceEnv( topic, msg ) {
-    console.log(topic);
-    console.log(msg);
 
     // Device details
     const topicparts = topic.split("/");
