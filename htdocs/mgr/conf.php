@@ -36,5 +36,35 @@ if (!securePage($_SERVER['PHP_SELF'])) {
 <div id="status">Connection Status: Not Connected</div>
 <br>
 
+<div class="card">
+  <h5 class="card-header">Device Name</h5>
+  <div class="card-body">
+    <h5 class="card-title">Environment</h5>
+    <p class="card-text">Serial no<br>
+    </p>
+  </div>
+</div>
+<br>
+<div class="card">
+  <div class="card-header">
+    <ul class="nav nav-tabs card-header-tabs">
+      <li class="nav-item">
+        <a class="nav-link active" href="#">Firmware</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Hardware</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Logging</a>
+      </li>
+    </ul>
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">Special title treatment</h5>
+    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+    <a href="#" class="btn btn-primary">Go somewhere</a>
+  </div>
+</div>
+
 
 <?php require_once $abs_us_root.$us_url_root.'users/includes/html_footer.php'; ?>

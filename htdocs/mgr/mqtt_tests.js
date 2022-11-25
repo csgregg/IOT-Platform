@@ -1,6 +1,6 @@
 
 // Load secrets
-secrets = new varpasser("secrets/private/secrets.php");
+secrets = new varpasser("../core/secrets/private/secrets.php");
 
 var connected_flag=0	
 var mqtt;
@@ -80,10 +80,10 @@ function MQTTConnect() {
 
     var clean_sessions=true;
 
-    host = secrets.getSecret("hivemq_host");
-    port = parseInt(secrets.getSecret("hivemq_port"));
-    user_name = secrets.getSecret("hivemq_user");;
-    password = secrets.getSecret("hivemq_pwd");;
+    host = secrets.getSecret("broker_host");
+    port = parseInt(secrets.getSecret("broker_port"));
+    user_name = secrets.getSecret("broker_user");;
+    password = secrets.getSecret("broker_pwd");;
 
     console.log("Connecting to MQTT Broker : " + host + " on port " + port + " with Clean Session = " + clean_sessions);
 

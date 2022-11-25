@@ -32,7 +32,7 @@ if (!securePage($_SERVER['PHP_SELF'])) {
 <link href="<?=$us_url_root?>core/core.css" type="text/css" rel="stylesheet">
 <script src="mgr.js" type="text/javascript"></script>
 
-<h3>Device Configuration</h3>
+<h3>Device Manager</h3>
 <div id="status">Connection Status: Not Connected</div>
 <br>
 
