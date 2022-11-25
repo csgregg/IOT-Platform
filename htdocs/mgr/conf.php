@@ -17,7 +17,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-require_once '../../users/init.php';
+require_once '../users/init.php';
 require_once $abs_us_root.$us_url_root.'users/includes/template/prep.php';
 if (!securePage($_SERVER['PHP_SELF'])) {
     die();
@@ -30,9 +30,9 @@ if (!securePage($_SERVER['PHP_SELF'])) {
 <script src="<?=$us_url_root?>core/mqttclient.js" type="text/javascript"></script>
 <script src="<?=$us_url_root?>core/core.js" type="text/javascript"></script>
 <link href="<?=$us_url_root?>core/core.css" type="text/css" rel="stylesheet">
-<script src="rota.js" type="text/javascript"></script>
+<script src="conf.js" type="text/javascript"></script>
 
-<h3>Rota App</h3>
+<h3>Device Setup</h3>
 <div id="status">Connection Status: Not Connected</div>
 <br>
 

@@ -3,7 +3,7 @@
 /**
  * Called when connected to broker
  */
- function nowConnected() {
+function nowConnected() {
 
 
 }

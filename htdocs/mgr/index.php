@@ -24,25 +24,17 @@ if (!securePage($_SERVER['PHP_SELF'])) {
 }
 ?>
 
+<script type="text/javascript">var us_url_root ="<?=$us_url_root?>";</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.js" type="text/javascript"></script>
 <script src="<?=$us_url_root?>core/varpasser.js" type="text/javascript"></script>
 <script src="<?=$us_url_root?>core/mqttclient.js" type="text/javascript"></script>
+<script src="<?=$us_url_root?>core/core.js" type="text/javascript"></script>
+<link href="<?=$us_url_root?>core/core.css" type="text/css" rel="stylesheet">
 <script src="mgr.js" type="text/javascript"></script>
 
-<h1>Device Manager</h1>
+<h3>Device Configuration</h3>
 <div id="status">Connection Status: Not Connected</div>
 <br>
-
-<style>
-.statusdot {
-  border-radius: 50%;
-  display: inline-block;
-  height: 15px;
-  width: 15px;
-  margin-top: 7px;
-  margin-left: 1px;
-}   
-</style>
 
 <div id="device-lister"></div>
 

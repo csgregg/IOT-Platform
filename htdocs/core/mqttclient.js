@@ -28,6 +28,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. */
 
+// Load secrets
+var secrets = new varpasser(us_url_root+"core/secrets/private/secrets.php");
 
 // Globals
 var mqtt;
@@ -139,13 +141,14 @@ function MQTTDisconnect() {
  * @param {function} failurehandler     Handler called when connection fails
  * @param {string} statusbar            Page element for status messages
  */
-function MQTTConnect( host, port, username, pwd, ssl, clean, successhandler, failurehandler, statusbar ) {
+function MQTTConnect( clean, successhandler, failurehandler, statusbar ) {
 
-    mqttHost = host;
-    mqttPort = port;
-    mqttUsername = username;
-    mqttPwd = pwd;
-    mqttSSL = ssl;
+    mqttHost = secrets.getSecret("broker_host");                // Host
+    mqttPort = parseInt(secrets.getSecret("broker_port"));      // Port
+    mqttUsername = secrets.getSecret("broker_user");            // Username
+    mqttPwd = secrets.getSecret("broker_pwd");                  // Password
+    mqttSSL = (secrets.getSecret("broker_ssl") == "true");      // SSL
+
     cleanSession = clean;
     
     connectSuccessHandler = successhandler;

@@ -12,11 +12,11 @@ $hivemq_ssl = "";
  
 // Add them all to the array
 $vars = array(
-  "hivemq_host"=>$hivemq_host,
-	"hivemq_port"=>$hivemq_port,
-  "hivemq_user"=>$hivemq_user,
-	"hivemq_pwd"=>$hivemq_pwd,
-  "hivemq_ssl"=>$hivemq_ssl
+  "broker_host"=>$hivemq_host,
+	"broker_port"=>$hivemq_port,
+  "broker_user"=>$hivemq_user,
+	"broker_pwd"=>$hivemq_pwd,
+  "broker_ssl"=>$hivemq_ssl
 );
  
 echo json_encode($vars);             
