@@ -50,7 +50,11 @@ function deleteDeviceFromList(code,id) {
 }
 
 
-
+function fixtoggle(object,source){
+    document.getElementById(object).parentElement.style.width =  document.getElementById(source).parentElement.style.width;
+    document.getElementById(object).parentElement.style.height =  document.getElementById(source).parentElement.style.height;
+    document.getElementById(object).parentElement.style.lineHeight =  document.getElementById(source).parentElement.style.lineHeight;
+}
 
 
 /**

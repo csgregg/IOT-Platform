@@ -32,39 +32,202 @@ if (!securePage($_SERVER['PHP_SELF'])) {
 <link href="<?=$us_url_root?>core/core.css" type="text/css" rel="stylesheet">
 <script src="conf.js" type="text/javascript"></script>
 
+<link href="https://cdn.jsdelivr.net/gh/digittal/bootstrap4-toggle/css/bootstrap4-toggle.min.css" rel="stylesheet">  
+<script src="https://cdn.jsdelivr.net/gh/digittal/bootstrap4-toggle/js/bootstrap4-toggle.min.js"></script>
+
 <h3>Device Setup</h3>
 <div id="status">Connection Status: Not Connected</div>
 <br>
 
-<div class="card">
-  <h5 class="card-header">Device Name</h5>
+<div class="card mb-3">
+
+  <div class="card-header">
+    <h5>
+      <div class="pull-left">
+        <span id="device-rota-456-status" class="statusdot mr-3" style="background:green;"></span>Remote OTA Test
+      </div>
+      <a class="pull-right badge badge-secondary" style="width: 75px;" href="index.php"><span class="fa fa-fw fa-mixcloud secondary"></span></a>
+    </h5>
+  </div>
+
   <div class="card-body">
-    <h5 class="card-title">Environment</h5>
-    <p class="card-text">Serial no<br>
-    </p>
+    <p class="card-text">An demo of using ESP8266 with Remote OTA and MQTT for management.</p>
+    <a href="../apps/rota" target="_blank" class="btn btn-primary btn-sm">Open &raquo;</a>
   </div>
 </div>
-<br>
-<div class="card">
+
+<div class="card mb-3">
   <div class="card-header">
     <ul class="nav nav-tabs card-header-tabs">
       <li class="nav-item">
-        <a class="nav-link active" href="#">Firmware</a>
+        <a class="nav-link text-dark active" data-toggle="tab" href="#firmware">Firmware</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">Hardware</a>
+        <a class="nav-link text-dark" data-toggle="tab" href="#system">System</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">Logging</a>
+        <a class="nav-link text-dark" data-toggle="tab" href="#hardware">Hardware</a>
       </li>
     </ul>
   </div>
   <div class="card-body">
-    <h5 class="card-title">Special title treatment</h5>
-    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-    <a href="#" class="btn btn-primary">Go somewhere</a>
+    <div class="tab-content">
+      <div class="tab-pane active" id="firmware">
+        <div class="card-deck">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Current</h5>
+              <p class="card-text">Release: 12.23.24<br>
+              Build: 1234<br>
+              Platform: Local</p>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Latest</h5>
+              <p class="card-text">Release: 14.23.24<br>
+              Build: 1234<br>
+              Platform: Travis</p>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-body">
+              <div class="container p-0">
+                <div class="row">
+                  <div class="col-auto mr-auto mb-2">
+                    <h5 class="card-title">Update</h5>
+                  </div>
+                  <div class="col-auto">
+                    <input id="autoupdate" class="" type="checkbox" checked data-toggle="toggle" data-onstyle="secondary" data-on="<i class='fa fa-play'></i> Auto" data-off="Auto <i class='fa fa-pause'></i>" data-size="sm">
+                  </div>
+                </div> 
+              </div>
+              <p class="card-text">Request firmware update.</p>
+              <a href="#" class="btn btn-secondary btn-sm">Update Now</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="tab-pane" id="system">
+        <div class="card-deck">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Device</h5>
+              <p class="card-text">Reboot the device.</p>
+              <a href="#" class="btn btn-secondary btn-sm">Restart</a>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Settings</h5>
+              <p class="card-text">Reset settings to default.</p>
+              <div class="container p-0">
+                <div class="row">
+                  <div class="col-auto mb-2">
+                    <a href="#" style="width: 120px;" class="btn btn-outline-danger btn-sm">All Settings</a>
+                  </div>
+                  <div class="col-auto">
+                    <a href="#" style="width: 120px;" class="btn btn-secondary btn-sm">Network</a>
+                  </div>
+                  <div class="col-auto mr-auto">
+                    <a href="#" style="width: 120px;" class="btn btn-secondary btn-sm">Time/Location</a>
+                  </div>
+                </div> 
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>      
+      <div class="tab-pane" id="hardware">
+        <div class="card-deck">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Board</h5>
+              <p class="card-text">Processor: ESP8266<br>
+              Board: Wemos D1 Mini</p>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Peripherals</h5>
+              <p class="card-text">LED controls</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
+<div class="card">
+  <b class="card-header text-dark">Logging</b>
+  <div class="card-body">
+    <div class="container">
+      <div class="row">
+        <div class="col-auto mr-auto">
+          <input type="checkbox" checked data-toggle="toggle" data-onstyle="secondary" data-on="<i class='fa fa-play'></i> On" data-off="Off <i class='fa fa-pause'></i>" data-size="sm">
+          <div class="btn-group btn-group-toggle mt-1 mb-1 mr-1" data-toggle="buttons">
+            <label class="btn btn-sm btn-light">
+              <input type="radio" name="options" id="option1" autocomplete="off" checked> Critical
+            </label>
+            <label class="btn btn-sm btn-light">
+              <input type="radio" name="options" id="option2" autocomplete="off"> Normal
+            </label>
+            <label class="btn btn-sm btn-light">
+              <input type="radio" name="options" id="option3" autocomplete="off"> High
+            </label>
+            <label class="btn btn-sm btn-light">
+              <input type="radio" name="options" id="option3" autocomplete="off"> Verbose
+            </label>
+          </div>
+        </div>
+        <div class="col-auto">
+          <input type="checkbox" checked data-toggle="toggle" data-onstyle="secondary" data-on="<i class='fa fa-play'></i> Ticker" data-off="Ticker <i class='fa fa-pause'></i>" data-size="sm"> 
+        </div>
+      </div>
+    </div>
+  </div>
+  <small>
+  <table class="table table-striped table-sm">
+    <thead class="thead-white">
+      <tr>
+        <th scope="col">&nbsp;#</th>
+        <th scope="col">Time</th>
+        <th scope="col">Type</th>
+        <th scope="col">Tag</th>
+        <th scope="col">Message</th>
+        <th scope="col">Heap</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">&nbsp;1</th>
+        <td>04-12-22 14:35</td>
+        <td>LOG</td>
+        <td>DEV</td>
+        <td>Hello message</td>
+        <td>12324</td>
+      </tr>
+      <tr>
+        <th scope="row">&nbsp;2</th>
+        <td>04-12-22 14:35</td>
+        <td>LOG</td>
+        <td>DEV</td>
+        <td>Hello message</td>
+        <td>12324</td>
+      </tr>
+      <tr>
+        <th scope="row">&nbsp;3</th>
+        <td>04-12-22 14:35</td>
+        <td>LOG</td>
+        <td>DEV</td>
+        <td>Hello message</td>
+        <td>12324</td>
+      </tr>
+    </tbody>
+  </table>
+  </small>
+</div>
 
 <?php require_once $abs_us_root.$us_url_root.'users/includes/html_footer.php'; ?>

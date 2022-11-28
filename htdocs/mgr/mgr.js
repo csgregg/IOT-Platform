@@ -56,18 +56,17 @@ function updateDeviceList() {
             // Set status
             var devicestatus = document.createElement("span");
             devicestatus.setAttribute("id","device-"+dev.code+"-"+dev.id+"-status");
-            devicestatus.setAttribute("class","statusdot");
+            devicestatus.setAttribute("class","statusdot mr-3");
             if( dev.status ) devicestatus.setAttribute("style", "background:green;");
             else devicestatus.setAttribute("style", "background:red;");
 
             devicestatusname.appendChild(devicestatus);
-            devicestatusname.innerHTML += "&nbsp;&nbsp;&nbsp;"+dev.name;
+            devicestatusname.innerHTML += dev.name;
 
             var deviceconf = document.createElement("a");
             deviceconf.setAttribute("id","device-"+dev.code+"-"+dev.id+"-conf");
             deviceconf.setAttribute("class","pull-right");
             deviceconf.setAttribute("href","conf.php?device="+dev.id);
-            deviceconf.setAttribute("target","_blank");
             deviceconf.innerHTML = "<span class='fa fa-fw fa-cogs' style='color:grey'></span>";
 
             devicename.appendChild(devicestatusname);
@@ -81,10 +80,8 @@ function updateDeviceList() {
 
             var devicetext = document.createElement("div");
             devicetext.setAttribute("id","device-"+dev.code+"-"+dev.id+"-details");
-            devicetext.setAttribute("class","card-text");
+            devicetext.setAttribute("class","card-text mb-3");
             devicetext.innerHTML = "An demo of using ESP8266 with Remote OTA and MQTT for management.";
-         
-            var space = document.createElement("br");
 
             var applaunch = document.createElement("a");
             applaunch.setAttribute("id","device-"+dev.code+"-"+dev.id+"-launch");
@@ -94,7 +91,6 @@ function updateDeviceList() {
             applaunch.innerHTML = "Open &raquo;";
 
             newcardhbody.appendChild(devicetext);
-            newcardhbody.appendChild(space);
             newcardhbody.appendChild(applaunch);
             newdevicecard.appendChild(newcardhbody);
 
