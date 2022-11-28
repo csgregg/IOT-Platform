@@ -30,7 +30,7 @@ if (!securePage($_SERVER['PHP_SELF'])) {
 <script src="<?=$us_url_root?>core/mqttclient.js" type="text/javascript"></script>
 <script src="<?=$us_url_root?>core/core.js" type="text/javascript"></script>
 <link href="<?=$us_url_root?>core/core.css" type="text/css" rel="stylesheet">
-<script src="mgr.js" type="text/javascript"></script>
+<script src="index.js" type="text/javascript"></script>
 
 <h3>Device Manager</h3>
 <div id="status">Connection Status: Not Connected</div>

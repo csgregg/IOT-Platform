@@ -66,7 +66,7 @@ function updateDeviceList() {
             var deviceconf = document.createElement("a");
             deviceconf.setAttribute("id","device-"+dev.code+"-"+dev.id+"-conf");
             deviceconf.setAttribute("class","pull-right");
-            deviceconf.setAttribute("href","conf.php?device="+dev.id);
+            deviceconf.setAttribute("href","conf.php?code="+dev.code+"&id="+dev.id);
             deviceconf.innerHTML = "<span class='fa fa-fw fa-cogs' style='color:grey'></span>";
 
             devicename.appendChild(devicestatusname);

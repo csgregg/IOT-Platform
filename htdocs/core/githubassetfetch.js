@@ -53,16 +53,15 @@ echo json_encode($vars);
 /** @class  Variable Passer
  *  @brief  Retrives and returs variables from secrets file, but protected by UserSpice permissions
  */
-class varpasser {
+class githubassetfetcher {
 
     /** Construct a new variable passer object
      * @param filepath          String containing path of secrets file to load
      */
-    constructor(filepath) {
+    constructor(repo,user) {
 
-        this.secretsFile = filepath;    // Path of secrets file
         this.valid;                     // Has the secrets file returned a valid JSON - user needs to be logged into UserSpice to do so
-        this.varsText;                  // Text returned from secrets file
+        this.repoText;                  // Text returned from secrets file
 
         var oReq = new XMLHttpRequest(); // New request object
 
@@ -71,27 +70,27 @@ class varpasser {
             // The actual data is found on this.responseText
 
             // Test to see if secrets file returns JSON - it will not if not logged in with UserSpice
-            if( varpasser.prototype.isJSON(this.responseText) ) {
-                varpasser.prototype.valid = true;
-                varpasser.prototype.varsText = this.responseText;
+            if( githubassetfetcher.prototype.isJSON(this.responseText) ) {
+                githubassetfetcher.prototype.valid = true;
+                githubassetfetcher.prototype.repoText = this.responseText;
 
             } else {
-                // console.log("Not logged in so can't pass variables to JS");
+                // console.log("Not valid response from GitHub Asset Fetch");
             }
         }
         
-        oReq.open("get", this.secretsFile, false);
+        oReq.open("get", us_url_root+"core/githubassetfetch.php?repo="+repo+"&user="+user, false);
         oReq.send();
     }
 
     /** Get value of particular variable 
      * @param str          String containing name of variable
      */
-    getSecret(str) {
+    getLatestRelease() {
         if( this.valid )
         {
-            var varsJSON = JSON.parse(this.varsText);
-            return varsJSON[str];
+            var repoJSON = JSON.parse(this.repoText);
+            return repoJSON.releases[0];
         } else {
             return "";
         }

@@ -29,6 +29,7 @@ if (!securePage($_SERVER['PHP_SELF'])) {
 <script src="<?=$us_url_root?>core/varpasser.js" type="text/javascript"></script>
 <script src="<?=$us_url_root?>core/mqttclient.js" type="text/javascript"></script>
 <script src="<?=$us_url_root?>core/core.js" type="text/javascript"></script>
+<script src="<?=$us_url_root?>core/githubassetfetch.js" type="text/javascript"></script>
 <link href="<?=$us_url_root?>core/core.css" type="text/css" rel="stylesheet">
 <script src="conf.js" type="text/javascript"></script>
 
@@ -77,17 +78,17 @@ if (!securePage($_SERVER['PHP_SELF'])) {
           <div class="card">
             <div class="card-body">
               <h5 class="card-title">Current</h5>
-              <p class="card-text">Release: 12.23.24<br>
-              Build: 1234<br>
-              Platform: Local</p>
+              <p class="card-text">Release: <b>12.23.24 (432)</b><br>
+              Timestamp: <b>12-10-22 14:34</b><br>
+              Env: <b>Local</b></p>
             </div>
           </div>
           <div class="card">
             <div class="card-body">
               <h5 class="card-title">Latest</h5>
-              <p class="card-text">Release: 14.23.24<br>
-              Build: 1234<br>
-              Platform: Travis</p>
+              <p class="card-text">Release: <b>14.23.24 (1234)</b><br>
+              Timestamp: <b>12-10-22 14:34</b><br>
+              Env: <b>Travis</b></p>
             </div>
           </div>
           <div class="card">
@@ -143,9 +144,10 @@ if (!securePage($_SERVER['PHP_SELF'])) {
         <div class="card-deck">
           <div class="card">
             <div class="card-body">
-              <h5 class="card-title">Board</h5>
-              <p class="card-text">Processor: ESP8266<br>
-              Board: Wemos D1 Mini</p>
+              <h5 class="card-title">Device</h5>
+              <p class="card-text">Processor: <b>ESP8266</b><br>
+              Board: <b>Wemos D1 Mini</b><br>
+              Device Code: <b>esp-8266-rota</b></p>
             </div>
           </div>
           <div class="card">
