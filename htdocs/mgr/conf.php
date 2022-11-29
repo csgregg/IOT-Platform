@@ -45,15 +45,32 @@ if (!securePage($_SERVER['PHP_SELF'])) {
   <div class="card-header">
     <h5>
       <div class="pull-left">
-        <span id="device-rota-456-status" class="statusdot mr-3" style="background:green;"></span>Remote OTA Test
+        <span id="device-status" class="statusdot mr-3" style="background:green;"></span><span id="device-name"></span>
       </div>
       <a class="pull-right badge badge-secondary" style="width: 75px;" href="index.php"><span class="fa fa-fw fa-mixcloud secondary"></span></a>
     </h5>
   </div>
 
   <div class="card-body">
-    <p class="card-text">An demo of using ESP8266 with Remote OTA and MQTT for management.</p>
-    <a href="../apps/rota" target="_blank" class="btn btn-primary btn-sm">Open &raquo;</a>
+    <div class="card-text">
+      <p id="device-desc" class="card-text"></p>
+      <div class="container">
+        <div class="row">
+          <div class="col-auto">
+            <a id="app-launch" href="#" target="_blank" class="btn btn-primary btn-sm">Open &raquo;</a>
+          </div>
+          <div class="col-auto">
+            <b id="app-name" class="card-text"></b>
+          </div>
+          <div class="col-auto mr-auto">
+            <p id="app-desc" class="card-text"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    
+    
   </div>
 </div>
 
@@ -78,17 +95,16 @@ if (!securePage($_SERVER['PHP_SELF'])) {
           <div class="card">
             <div class="card-body">
               <h5 class="card-title">Current</h5>
-              <p class="card-text">Release: <b>12.23.24 (432)</b><br>
-              Timestamp: <b>12-10-22 14:34</b><br>
-              Env: <b>Local</b></p>
+              <p class="card-text">Release: <b id="curRelease"></b><br>
+              Timestamp: <b id="curTimestamp"></b><br>
+              Environment: <b id="curEnv"></b></p>
             </div>
           </div>
           <div class="card">
             <div class="card-body">
               <h5 class="card-title">Latest</h5>
-              <p class="card-text">Release: <b>14.23.24 (1234)</b><br>
-              Timestamp: <b>12-10-22 14:34</b><br>
-              Env: <b>Travis</b></p>
+              <p class="card-text">Release: <b id="lateRelease"></b><br>
+              Timestamp: <b id="lateTimestamp"></b></p>
             </div>
           </div>
           <div class="card">
@@ -99,7 +115,7 @@ if (!securePage($_SERVER['PHP_SELF'])) {
                     <h5 class="card-title">Update</h5>
                   </div>
                   <div class="col-auto">
-                    <input id="autoupdate" class="" type="checkbox" checked data-toggle="toggle" data-onstyle="secondary" data-on="<i class='fa fa-play'></i> Auto" data-off="Auto <i class='fa fa-pause'></i>" data-size="sm">
+                    <input id="autoupdate" class="" type="checkbox" data-toggle="toggle" data-onstyle="secondary" data-on="<i class='fa fa-play'></i> Auto" data-off="Auto <i class='fa fa-pause'></i>" data-size="sm">
                   </div>
                 </div> 
               </div>
@@ -168,24 +184,24 @@ if (!securePage($_SERVER['PHP_SELF'])) {
     <div class="container">
       <div class="row">
         <div class="col-auto mr-auto">
-          <input type="checkbox" checked data-toggle="toggle" data-onstyle="secondary" data-on="<i class='fa fa-play'></i> On" data-off="Off <i class='fa fa-pause'></i>" data-size="sm">
-          <div class="btn-group btn-group-toggle mt-1 mb-1 mr-1" data-toggle="buttons">
-            <label class="btn btn-sm btn-light">
-              <input type="radio" name="options" id="option1" autocomplete="off" checked> Critical
+          <input id="logOn" type="checkbox"  data-toggle="toggle" data-onstyle="secondary" data-on="<i class='fa fa-play'></i> On" data-off="Off <i class='fa fa-pause'></i>" data-size="sm">
+          <div id="logLevel" class="btn-group btn-group-toggle mt-1 mb-1 mr-1" data-toggle="buttons">
+            <label id="logLevel0" class="btn btn-sm btn-light">
+              <input type="radio" name="options" autocomplete="off"> Critical
             </label>
-            <label class="btn btn-sm btn-light">
-              <input type="radio" name="options" id="option2" autocomplete="off"> Normal
+            <label id="logLevel1" class="btn btn-sm btn-light">
+              <input type="radio" name="options" autocomplete="off"> Normal
             </label>
-            <label class="btn btn-sm btn-light">
-              <input type="radio" name="options" id="option3" autocomplete="off"> High
+            <label id="logLevel2" class="btn btn-sm btn-light">
+              <input type="radio" name="options" autocomplete="off"> High
             </label>
-            <label class="btn btn-sm btn-light">
-              <input type="radio" name="options" id="option3" autocomplete="off"> Verbose
+            <label id="logLevel3" class="btn btn-sm btn-light">
+              <input type="radio" name="options" autocomplete="off"> Verbose
             </label>
           </div>
         </div>
         <div class="col-auto">
-          <input type="checkbox" checked data-toggle="toggle" data-onstyle="secondary" data-on="<i class='fa fa-play'></i> Ticker" data-off="Ticker <i class='fa fa-pause'></i>" data-size="sm"> 
+          <input id="logTicker" type="checkbox" data-toggle="toggle" data-onstyle="secondary" data-on="<i class='fa fa-play'></i> Ticker" data-off="Ticker <i class='fa fa-pause'></i>" data-size="sm"> 
         </div>
       </div>
     </div>

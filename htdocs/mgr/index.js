@@ -81,7 +81,7 @@ function updateDeviceList() {
             var devicetext = document.createElement("div");
             devicetext.setAttribute("id","device-"+dev.code+"-"+dev.id+"-details");
             devicetext.setAttribute("class","card-text mb-3");
-            devicetext.innerHTML = "An demo of using ESP8266 with Remote OTA and MQTT for management.";
+            devicetext.innerHTML = dev.description;
 
             var applaunch = document.createElement("a");
             applaunch.setAttribute("id","device-"+dev.code+"-"+dev.id+"-launch");
