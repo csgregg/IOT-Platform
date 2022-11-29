@@ -43,18 +43,36 @@ function handleEnvUpdate( topic, msg ) {
     handlernDeviceEnv( topic, msg);
 
     const topicparts = topic.split("/");
+    
+    if( topicparts[4] == "repo" ) {
+        var githubrepo = new githubassetfetcher(thisdevice.repo,"csgregg");
+        var latestRelease = githubrepo.getLatestRelease();
+        document.getElementById("lateRelease").innerHTML = latestRelease.tag;
+        var timestamp = new Date(latestRelease.date);
+        document.getElementById("lateTimestamp").innerHTML = timestamp.toLocaleString( 'en-GB', {
+            day: 'numeric',
+            year: 'numeric',
+            month: 'short', 
+            hour: 'numeric',
+            minute: 'numeric',
+            second: 'numeric',
+        });
+    }
 
     document.getElementById("curRelease").innerHTML = thisdevice.release;
-    var timestamp = new Date(thisdevice.timestamp);
-    document.getElementById("curTimestamp").innerHTML = timestamp.toLocaleString( 'en-GB', {
-        day: 'numeric',
-        year: 'numeric',
-        month: 'short', 
-        hour: 'numeric',
-        minute: 'numeric',
-        second: 'numeric',
-        });
     document.getElementById("curEnv").innerHTML = thisdevice.environment+" ("+thisdevice.build+")";
+
+    if( topicparts[4] == "time" ) {
+        var timestamp = new Date(thisdevice.timestamp);
+        document.getElementById("curTimestamp").innerHTML = timestamp.toLocaleString( 'en-GB', {
+            day: 'numeric',
+            year: 'numeric',
+            month: 'short', 
+            hour: 'numeric',
+            minute: 'numeric',
+            second: 'numeric',
+            });
+    }
 
     if( thisdevice.update ) $('#autoupdate').bootstrapToggle('on');
     else $('#autoupdate').bootstrapToggle('off');
@@ -64,7 +82,6 @@ function handleEnvUpdate( topic, msg ) {
 
     if( topicparts[4] == "brd" ) {
         var board = boardTypes.find(board => board.code === thisdevice.board);
-        console.log(board)
         document.getElementById("device-proc").innerHTML = board.processeor;
         document.getElementById("device-board").innerHTML = board.name;  
     }
@@ -117,23 +134,6 @@ function handlerUpdateDevice( topic, msg ){
 
         MQTTSubTopic("devices/"+deviceCode+"/"+deviceID+"/env/#", 0, handleEnvUpdate );
         MQTTSubTopic("devices/"+deviceCode+"/"+deviceID+"/log/#", 0, handleLogUpdate );
-
-        var repo = thisdevice.code;
-        repo = "csg-esp8266-rota";
-        
-        var githubrepo = new githubassetfetcher(repo,"csgregg");
-        var latestRelease = githubrepo.getLatestRelease();
-        document.getElementById("lateRelease").innerHTML = latestRelease.tag;
-        var timestamp = new Date(latestRelease.date);
-        document.getElementById("lateTimestamp").innerHTML = timestamp.toLocaleString( 'en-GB', {
-            day: 'numeric',
-            year: 'numeric',
-            month: 'short', 
-            hour: 'numeric',
-            minute: 'numeric',
-            second: 'numeric',
-           });
-
     }
 
     var updatestatus = document.getElementById("device-status");

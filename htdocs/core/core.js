@@ -52,6 +52,7 @@ function handlernDeviceEnv( topic, msg ) {
         if( topicparts[4] == "time" )thisdevice.timestamp = msg;
         if( topicparts[4] == "up" ) thisdevice.update = (msg=="true");
         if( topicparts[4] == "serl" ) thisdevice.serial = msg;
+        if( topicparts[4] == "repo" ) thisdevice.repo = msg;
     }
 
 }
@@ -132,7 +133,8 @@ function handlerKnownDevice( topic, msg ) {
                     environment : "",
                     timestamp   : "",
                     update      : false,
-                    serial      : ""
+                    serial      : "",
+                    repo        : ""
                 }
             );
         } else {
