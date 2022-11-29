@@ -21,6 +21,14 @@ var applist = [
     }
 ];
 
+var boardTypes = [
+    {
+        code        : "d1_mini",
+        name        : "Wemos D1 Mini",
+        processeor  : "ESP8266"
+    }
+]
+
 // Array of knowns devices
 var devices = [];
 
@@ -43,6 +51,7 @@ function handlernDeviceEnv( topic, msg ) {
         if( topicparts[4] == "env" )thisdevice.environment = msg;
         if( topicparts[4] == "time" )thisdevice.timestamp = msg;
         if( topicparts[4] == "up" ) thisdevice.update = (msg=="true");
+        if( topicparts[4] == "serl" ) thisdevice.serial = msg;
     }
 
 }
@@ -108,21 +117,22 @@ function handlerKnownDevice( topic, msg ) {
 
             devices.push(
                 {
-                    id : id,
-                    status : online,
+                    id          : id,
+                    status      : online,
                     statustopic : topic,
-                    code : code,
-                    name : name,
+                    code        : code,
+                    name        : name,
                     description : description,
-                    app : app,
-                    processeor : "",
-                    board : "",
+                    app         : app,
+                    processeor  : "",
+                    board       : "",
                     peripherals : "",
-                    release : "",
-                    build : "",
+                    release     : "",
+                    build       : "",
                     environment : "",
-                    timestamp : "",
-                    update : false
+                    timestamp   : "",
+                    update      : false,
+                    serial      : ""
                 }
             );
         } else {

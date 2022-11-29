@@ -55,26 +55,22 @@ if (!securePage($_SERVER['PHP_SELF'])) {
     </h5>
   </div>
 
-  <div class="card-body">
+  <div class="card-body mb-0">
     <div class="card-text">
-      <p id="device-desc" class="card-text"></p>
-      <div class="container">
-        <div class="row">
+      <p>Device Code: <b><span id="device-code"></span></b><br>
+      <span id="device-desc"></span></p>
+      <div class="container p-0">
+        <div class="row align-items-center">
           <div class="col-auto">
             <a id="app-launch" href="#" target="_blank" class="btn btn-primary btn-sm">Open &raquo;</a>
           </div>
           <div class="col-auto">
-            <b id="app-name" class="card-text"></b>
-          </div>
-          <div class="col-auto mr-auto">
-            <p id="app-desc" class="card-text"></p>
+            <b><span id="app-name"></span></b><br>
+            <span id="app-desc"></span>
           </div>
         </div>
       </div>
     </div>
-
-    
-    
   </div>
 </div>
 
@@ -165,15 +161,15 @@ if (!securePage($_SERVER['PHP_SELF'])) {
           <div class="card">
             <div class="card-body">
               <h5 class="card-title">Device</h5>
-              <p class="card-text">Processor: <b>ESP8266</b><br>
-              Board: <b>Wemos D1 Mini</b><br>
-              Device Code: <b>esp-8266-rota</b></p>
+              <p class="card-text">Processor: <b><span id="device-proc"></span></b><br>
+              Board: <b><span id="device-board"></span></b><br>
+              Serial Number: <b><span id="device-serial"></span></b></p>
             </div>
           </div>
           <div class="card">
             <div class="card-body">
               <h5 class="card-title">Peripherals</h5>
-              <p class="card-text">LED controls</p>
+              <p><span id="device-peri" class="card-text"></span></p>
             </div>
           </div>
         </div>
@@ -238,5 +234,5 @@ if (!securePage($_SERVER['PHP_SELF'])) {
     </div>
   </small>
 </div>
-
+<br>
 <?php require_once $abs_us_root.$us_url_root.'users/includes/html_footer.php'; ?>

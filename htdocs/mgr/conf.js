@@ -10,40 +10,6 @@ var loggingTick = false;
 
 var logMQTTEnabled = false;
 
-function updateDeviceInfo() {
-
-    document.getElementById("curRelease").innerHTML = thisdevice.release;
-    var timestamp = new Date(thisdevice.timestamp);
-    document.getElementById("curTimestamp").innerHTML = timestamp.toLocaleString( 'en-GB', {
-        day: 'numeric',
-        year: 'numeric',
-        month: 'short', 
-        hour: 'numeric',
-        minute: 'numeric',
-        second: 'numeric',
-        });
-    document.getElementById("curEnv").innerHTML = thisdevice.environment+" ("+thisdevice.build+")";
-
-    if( thisdevice.update ) $('#autoupdate').bootstrapToggle('on');
-    else $('#autoupdate').bootstrapToggle('off');
-
-    if( loggingOn ) $('#logOn').bootstrapToggle('on');
-    else $('#logOn').bootstrapToggle('off');
-
-    if( loggingTick ) $('#logTicker').bootstrapToggle('on');
-    else $('#logTicker').bootstrapToggle('off');
-
-    document.getElementById("logLevel0").classList.remove("active");
-    document.getElementById("logLevel1").classList.remove("active");
-    document.getElementById("logLevel2").classList.remove("active");
-    document.getElementById("logLevel3").classList.remove("active");
-    document.getElementById("logLevel"+loggingLevel).classList.add("active");
-
-}
-
-
-
-
 
 
 function logMQTT(topic,msg) {
@@ -75,7 +41,34 @@ function logMQTT(topic,msg) {
 
 function handleEnvUpdate( topic, msg ) {
     handlernDeviceEnv( topic, msg);
-    updateDeviceInfo();
+
+    const topicparts = topic.split("/");
+
+    document.getElementById("curRelease").innerHTML = thisdevice.release;
+    var timestamp = new Date(thisdevice.timestamp);
+    document.getElementById("curTimestamp").innerHTML = timestamp.toLocaleString( 'en-GB', {
+        day: 'numeric',
+        year: 'numeric',
+        month: 'short', 
+        hour: 'numeric',
+        minute: 'numeric',
+        second: 'numeric',
+        });
+    document.getElementById("curEnv").innerHTML = thisdevice.environment+" ("+thisdevice.build+")";
+
+    if( thisdevice.update ) $('#autoupdate').bootstrapToggle('on');
+    else $('#autoupdate').bootstrapToggle('off');
+
+    document.getElementById("device-serial").innerHTML = thisdevice.serial;
+    document.getElementById("device-peri").innerHTML = thisdevice.peripherals;
+
+    if( topicparts[4] == "brd" ) {
+        var board = boardTypes.find(board => board.code === thisdevice.board);
+        console.log(board)
+        document.getElementById("device-proc").innerHTML = board.processeor;
+        document.getElementById("device-board").innerHTML = board.name;  
+    }
+
     if( logMQTTEnabled ) logMQTT( topic,msg );
 }
 
@@ -88,7 +81,18 @@ function handleLogUpdate( topic, msg ) {
     if( topicparts[4] == "tick" ) loggingTick = (msg=="true");
     if( topicparts[4] == "level" ) loggingLevel = Number(msg);
 
-    updateDeviceInfo();
+    if( loggingOn ) $('#logOn').bootstrapToggle('on');
+    else $('#logOn').bootstrapToggle('off');
+
+    if( loggingTick ) $('#logTicker').bootstrapToggle('on');
+    else $('#logTicker').bootstrapToggle('off');
+
+    document.getElementById("logLevel0").classList.remove("active");
+    document.getElementById("logLevel1").classList.remove("active");
+    document.getElementById("logLevel2").classList.remove("active");
+    document.getElementById("logLevel3").classList.remove("active");
+    document.getElementById("logLevel"+loggingLevel).classList.add("active");
+
 
     if( logMQTTEnabled ) logMQTT( topic,msg );
 }
@@ -102,6 +106,7 @@ function handlerUpdateDevice( topic, msg ){
         subscribed = true;
         thisdevice = devices[0];
 
+        document.getElementById("device-code").innerHTML = thisdevice.code;
         document.getElementById("device-name").innerHTML = thisdevice.name;
         document.getElementById("device-desc").innerHTML = thisdevice.description;
 
@@ -157,15 +162,15 @@ window.addEventListener("load", function() {
     deviceID = urlParams.get('id');
 
     let table = new DataTable('#logTable', {
-            "order":[[0,"des"]],
-            "columns": [
-                { "width": "5%" },
-                null,
-                null,
-                null,
-                null,
-                null
-              ]
+        "order":[[0,"des"]],
+        "columns": [
+            { "width": "5%" },
+            { "width": "20%" },
+            { "width": "10%" },
+            { "width": "20%" },
+            null,
+            { "width": "10%" }
+            ]
     });
 
 
