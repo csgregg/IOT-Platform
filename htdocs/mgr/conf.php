@@ -36,6 +36,10 @@ if (!securePage($_SERVER['PHP_SELF'])) {
 <link href="https://cdn.jsdelivr.net/gh/digittal/bootstrap4-toggle/css/bootstrap4-toggle.min.css" rel="stylesheet">  
 <script src="https://cdn.jsdelivr.net/gh/digittal/bootstrap4-toggle/js/bootstrap4-toggle.min.js"></script>
 
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.css">
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.js"></script>
+
+
 <h3>Device Setup</h3>
 <div id="status">Connection Status: Not Connected</div>
 <br>
@@ -201,50 +205,37 @@ if (!securePage($_SERVER['PHP_SELF'])) {
           </div>
         </div>
         <div class="col-auto">
+          <input id="logMQTT" type="checkbox" onChange="evntToggleClicked();" data-toggle="toggle" data-onstyle="secondary" data-on="<i class='fa fa-play'></i> MQTT" data-off="MQTT <i class='fa fa-pause'></i>" data-size="sm"> 
+          <script>
+            $(function() {
+              $('#logMQTT').change(function() {
+                logMQTTEnabled = $(this).prop('checked');
+              })
+            })
+          </script>
           <input id="logTicker" type="checkbox" data-toggle="toggle" data-onstyle="secondary" data-on="<i class='fa fa-play'></i> Ticker" data-off="Ticker <i class='fa fa-pause'></i>" data-size="sm"> 
         </div>
       </div>
     </div>
   </div>
+  <hr class="mt-0">
   <small>
-  <table class="table table-striped table-sm">
-    <thead class="thead-white">
-      <tr>
-        <th scope="col">&nbsp;#</th>
-        <th scope="col">Time</th>
-        <th scope="col">Type</th>
-        <th scope="col">Tag</th>
-        <th scope="col">Message</th>
-        <th scope="col">Heap</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <th scope="row">&nbsp;1</th>
-        <td>04-12-22 14:35</td>
-        <td>LOG</td>
-        <td>DEV</td>
-        <td>Hello message</td>
-        <td>12324</td>
-      </tr>
-      <tr>
-        <th scope="row">&nbsp;2</th>
-        <td>04-12-22 14:35</td>
-        <td>LOG</td>
-        <td>DEV</td>
-        <td>Hello message</td>
-        <td>12324</td>
-      </tr>
-      <tr>
-        <th scope="row">&nbsp;3</th>
-        <td>04-12-22 14:35</td>
-        <td>LOG</td>
-        <td>DEV</td>
-        <td>Hello message</td>
-        <td>12324</td>
-      </tr>
-    </tbody>
-  </table>
+    <div class="container mb-3 table-responsive">
+      <table id="logTable" class="display compact">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Time</th>
+            <th>Type</th>
+            <th>Tag</th>
+            <th>Message</th>
+            <th>Heap</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
   </small>
 </div>
 

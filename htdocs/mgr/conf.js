@@ -8,6 +8,8 @@ var loggingOn = false;
 var loggingLevel = 0;
 var loggingTick = false;
 
+var logMQTTEnabled = false;
+
 function updateDeviceInfo() {
 
     document.getElementById("curRelease").innerHTML = thisdevice.release;
@@ -36,12 +38,45 @@ function updateDeviceInfo() {
     document.getElementById("logLevel2").classList.remove("active");
     document.getElementById("logLevel3").classList.remove("active");
     document.getElementById("logLevel"+loggingLevel).classList.add("active");
+
+}
+
+
+
+
+
+
+function logMQTT(topic,msg) {
+    var table = $('#logTable').DataTable();
+    var strTag = "";
+    var strMsg = "";
+    var time = "";
+    
+    strTag = topic;
+    strMsg = msg;
+    time = new Date();
+    table.row.add( [
+        table.rows().count()+1,
+        time.toLocaleString( 'en-GB', {
+            day: 'numeric',
+            year: 'numeric',
+            month: 'short', 
+            hour: 'numeric',
+            minute: 'numeric',
+            second: 'numeric',
+            }),
+        "MQTT",
+        strTag,
+        strMsg,
+        "-"
+    ] ).draw();
 }
 
 
 function handleEnvUpdate( topic, msg ) {
     handlernDeviceEnv( topic, msg);
     updateDeviceInfo();
+    if( logMQTTEnabled ) logMQTT( topic,msg );
 }
 
 function handleLogUpdate( topic, msg ) {
@@ -54,6 +89,8 @@ function handleLogUpdate( topic, msg ) {
     if( topicparts[4] == "level" ) loggingLevel = Number(msg);
 
     updateDeviceInfo();
+
+    if( logMQTTEnabled ) logMQTT( topic,msg );
 }
 
 
@@ -98,6 +135,7 @@ function handlerUpdateDevice( topic, msg ){
     if( thisdevice.status ) updatestatus.setAttribute("style","background:green;");
     else updatestatus.setAttribute("style","background:red;");
     
+    if( logMQTTEnabled ) logMQTT( topic,msg );
 }
 
 
@@ -115,9 +153,21 @@ function nowConnected() {
 window.addEventListener("load", function() {
 
     const urlParams = new URLSearchParams(window.location.search);
-
     deviceCode = urlParams.get('code');
     deviceID = urlParams.get('id');
+
+    let table = new DataTable('#logTable', {
+            "order":[[0,"des"]],
+            "columns": [
+                { "width": "5%" },
+                null,
+                null,
+                null,
+                null,
+                null
+              ]
+    });
+
 
     // Connect to broker
     MQTTConnect(
