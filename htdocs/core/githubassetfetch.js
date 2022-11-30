@@ -75,11 +75,11 @@ class githubassetfetcher {
                 githubassetfetcher.prototype.repoText = this.responseText;
 
             } else {
-                // console.log("Not valid response from GitHub Asset Fetch");
+                console.log( oReq.statusText );     // Report error from GitHub
             }
         }
         
-        oReq.open("get", us_url_root+"core/githubassetfetch.php?repo="+repo+"&user="+user, false);
+        oReq.open("get", us_url_root+"core/githubassetfetch.php?repo="+repo+"&user="+user, false);          // TODO Add authentication to fetcher
         oReq.send();
     }
 

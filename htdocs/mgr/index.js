@@ -98,7 +98,7 @@ function updateDeviceList() {
             else devicestatus.setAttribute("style", "background:red;");
 
             devicestatusname.appendChild(devicestatus);
-            devicestatusname.innerHTML += dev.name;
+            devicestatusname.innerHTML += "<span id='device-title'>"+dev.name+"</span>";
 
             var deviceconf = document.createElement("a");
             deviceconf.setAttribute("id","device-"+dev.code+"-"+dev.id+"-conf");
@@ -134,9 +134,6 @@ function updateDeviceList() {
             // Add card to deck
             var appdeck = document.getElementById("app-"+dev.app+"-devices");
             appdeck.appendChild(newdevicecard);
-
-            // Now subscribe to device env
-            MQTTSubTopic("devices/"+dev.code+"/"+dev.id+"/env/#", 0, callCoreDeviceEnv );
 
         } else {
 

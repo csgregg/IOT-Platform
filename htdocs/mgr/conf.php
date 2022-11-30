@@ -81,7 +81,7 @@ if (!securePage($_SERVER['PHP_SELF'])) {
   <div class="card-header">
     <h5>
       <div class="pull-left">
-        <span id="device-status" class="statusdot mr-3" style="background:green;"></span><span id="device-name"></span>
+        <span id="device-status" class="statusdot mr-3" style="background:green;"></span><span id="device-title"></span>
       </div>
       <a class="pull-right badge badge-secondary" style="width: 75px;" href="index.php"><span class="fa fa-fw fa-mixcloud secondary"></span></a>
     </h5>
@@ -135,7 +135,8 @@ if (!securePage($_SERVER['PHP_SELF'])) {
             <div class="card-body">
               <h5 class="card-title">Latest</h5>
               <p class="card-text">Release: <b id="lateRelease"></b><br>
-              Timestamp: <b id="lateTimestamp"></b></p>
+              Timestamp: <b id="lateTimestamp"></b><br>
+              <small><a id="lateRepo" href="#" target="_blank" class="text-dark"></a></small></p>
             </div>
           </div>
           <div class="card">
@@ -174,7 +175,7 @@ if (!securePage($_SERVER['PHP_SELF'])) {
                   <div class="col-auto mb-2">
                     <a href="#" style="width: 120px;" class="btn btn-outline-danger btn-sm">All Settings</a>
                   </div>
-                  <div class="col-auto">
+                  <div class="col-auto mb-2">
                     <a href="#" style="width: 120px;" class="btn btn-secondary btn-sm">Network</a>
                   </div>
                   <div class="col-auto mr-auto">

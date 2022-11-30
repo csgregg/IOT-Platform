@@ -137,6 +137,9 @@ function callEnvUpdate( topic, msg ) {
     if( topicparts[4] == "repo" ) {
 
         var githubrepo = new githubassetfetcher(thisDevice.repo,"csgregg");
+        var repoURL = "https://github.com/csgregg/"+thisDevice.repo;
+        document.getElementById("lateRepo").innerHTML = repoURL;
+        document.getElementById("lateRepo").setAttribute("href",repoURL);
 
         var latestRelease = githubrepo.getLatestRelease();
         document.getElementById("lateRelease").innerHTML = latestRelease.tag;
@@ -184,6 +187,9 @@ function callEnvUpdate( topic, msg ) {
         document.getElementById("device-board").innerHTML = board.name;  
     }
 
+    // Update title
+    if( thisDevice.knownas != "" ) document.getElementById("device-title").innerHTML = thisDevice.title+" ("+thisDevice.name+") - "+thisDevice.id;
+
     // Log this message if logging MQTT
     if( logMQTTEnabled ) logMQTT( topic,msg );
 }
@@ -205,8 +211,8 @@ function callUpdateDevice( topic, msg ){
 
         // Update UI with basics
         document.getElementById("device-code").innerHTML = thisDevice.code;
-        document.getElementById("device-name").innerHTML = thisDevice.name;
         document.getElementById("device-desc").innerHTML = thisDevice.description;
+        document.getElementById("device-title").innerHTML = thisDevice.name+" - "+thisDevice.id;;
 
         var app = coreAppList.find( app => app.code === thisDevice.app );           // TODO error handling
         document.getElementById("app-name").innerHTML = app.name;

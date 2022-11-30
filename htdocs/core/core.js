@@ -94,6 +94,7 @@ function callCoreDeviceEnv( topic, msg ) {
     if( topicparts[4] == "up" )     thisdevice.update = ( msg == "true" );
     if( topicparts[4] == "serl" )   thisdevice.serial = msg;
     if( topicparts[4] == "repo" )   thisdevice.repo = msg;
+    if( topicparts[4] == "titl" )   thisdevice.title = msg;
 
 }
 
@@ -158,7 +159,8 @@ function callCoreUpdateKnownDevice( topic, msg ) {
                     timestamp   : "",
                     update      : false,
                     serial      : "",
-                    repo        : ""
+                    repo        : "",
+                    title     : ""
                 }
             );
         } else {
@@ -192,6 +194,7 @@ $(function() {
 
     var githubrepo = new githubassetfetcher( repo, repouser );
     var latestRelease = githubrepo.getLatestRelease();
+
     var timestamp = new Date(latestRelease.date);
 
     var time = timestamp.toLocaleString( 'en-GB', {
