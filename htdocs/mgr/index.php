@@ -63,6 +63,7 @@ if (!securePage($_SERVER['PHP_SELF'])) {
 
 <script src="<?=$us_url_root?>core/varpasser.js" type="text/javascript"></script>
 <script src="<?=$us_url_root?>core/mqttclient.js" type="text/javascript"></script>
+<script src="<?=$us_url_root?>core/githubassetfetch.js" type="text/javascript"></script>
 <script src="<?=$us_url_root?>core/core.js" type="text/javascript"></script>
 <link href="<?=$us_url_root?>core/core.css" type="text/css" rel="stylesheet">
 

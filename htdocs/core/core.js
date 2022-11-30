@@ -183,3 +183,27 @@ function coreFixToggle(object,source) {
     document.getElementById(object).parentElement.style.lineHeight =  document.getElementById(source).parentElement.style.lineHeight;
 
 }
+
+
+$(function() {
+
+    var repo = "IOT-Platform";
+    var repouser = "csgregg";
+
+    var githubrepo = new githubassetfetcher( repo, repouser );
+    var latestRelease = githubrepo.getLatestRelease();
+    var timestamp = new Date(latestRelease.date);
+
+    var time = timestamp.toLocaleString( 'en-GB', {
+        day: 'numeric',
+        year: 'numeric',
+        month: 'short', 
+        hour: 'numeric',
+        minute: 'numeric',
+        second: 'numeric',
+    });
+
+    var buildMessage = "<br>GitHub: "+repouser+"/"+repo+" "+"Release: "+latestRelease.tag+" "+time;
+    $("#footer").children("p").append(buildMessage);
+    $("#footer").children("p").wrap("<small><small>");
+});
