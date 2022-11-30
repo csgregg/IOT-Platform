@@ -109,7 +109,7 @@ function onMQTTConnected(recon,url){
  * Called when connecting succeeds
  */
 function onMQTTConnectionSuccess() {
-    var msg = "Connected";
+    var msg = "Connected to MQTT Broker";
     console.log(msg);
     document.getElementById(statusBar).innerHTML = msg;
 
@@ -199,7 +199,7 @@ function MQTTSubTopic(stopic,sqos,handler){
 
     if (sqos>2) sqos=0;
 
-    console.log("Subscribing to MQTT topic = " + stopic + " QOS " + sqos);
+    console.log("Subscribing to MQTT topic: " + stopic + " QOS " + sqos);
 
     var soptions = {
         qos:sqos,

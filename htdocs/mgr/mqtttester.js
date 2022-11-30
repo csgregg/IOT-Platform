@@ -174,10 +174,4 @@ window.addEventListener("load", function() {
 
 });
 
-window.addEventListener("beforeunload", function(evt) {
-    MQTTDisconnect();
-    evt.preventDefault();
-    evt.returnValue = '';
-    return null;
-});
 

@@ -1,4 +1,35 @@
 <?php
+
+/**
+ * @file        conf.php
+ * @author      Chris Gregg
+ * 
+ * @brief       Functionality for device configuration page
+ * 
+ * @copyright   Copyright (c) 2022
+ * 
+ */
+
+/* MIT License
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE. */
+
 /*
 UserSpice 5
 An Open Source PHP User Management System
@@ -17,6 +48,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
+// Add core UserSpice protections
 require_once '../users/init.php';
 require_once $abs_us_root.$us_url_root.'users/includes/template/prep.php';
 if (!securePage($_SERVER['PHP_SELF'])) {
@@ -25,27 +58,26 @@ if (!securePage($_SERVER['PHP_SELF'])) {
 ?>
 
 <script type="text/javascript">var us_url_root ="<?=$us_url_root?>";</script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.js" type="text/javascript"></script>
+<link href="https://cdn.jsdelivr.net/gh/digittal/bootstrap4-toggle/css/bootstrap4-toggle.min.css" rel="stylesheet">  
+<script src="https://cdn.jsdelivr.net/gh/digittal/bootstrap4-toggle/js/bootstrap4-toggle.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.css">
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.js"></script>
+
 <script src="<?=$us_url_root?>core/varpasser.js" type="text/javascript"></script>
 <script src="<?=$us_url_root?>core/mqttclient.js" type="text/javascript"></script>
 <script src="<?=$us_url_root?>core/core.js" type="text/javascript"></script>
 <script src="<?=$us_url_root?>core/githubassetfetch.js" type="text/javascript"></script>
 <link href="<?=$us_url_root?>core/core.css" type="text/css" rel="stylesheet">
+
 <script src="conf.js" type="text/javascript"></script>
-
-<link href="https://cdn.jsdelivr.net/gh/digittal/bootstrap4-toggle/css/bootstrap4-toggle.min.css" rel="stylesheet">  
-<script src="https://cdn.jsdelivr.net/gh/digittal/bootstrap4-toggle/js/bootstrap4-toggle.min.js"></script>
-
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.css">
-<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.js"></script>
-
 
 <h3>Device Setup</h3>
 <div id="status">Connection Status: Not Connected</div>
 <br>
 
 <div class="card mb-3">
-
   <div class="card-header">
     <h5>
       <div class="pull-left">
@@ -54,7 +86,6 @@ if (!securePage($_SERVER['PHP_SELF'])) {
       <a class="pull-right badge badge-secondary" style="width: 75px;" href="index.php"><span class="fa fa-fw fa-mixcloud secondary"></span></a>
     </h5>
   </div>
-
   <div class="card-body mb-0">
     <div class="card-text">
       <p>Device Code: <b><span id="device-code"></span></b><br>
@@ -124,7 +155,6 @@ if (!securePage($_SERVER['PHP_SELF'])) {
             </div>
           </div>
         </div>
-
       </div>
       <div class="tab-pane" id="system">
         <div class="card-deck">
@@ -201,14 +231,7 @@ if (!securePage($_SERVER['PHP_SELF'])) {
           </div>
         </div>
         <div class="col-auto">
-          <input id="logMQTT" type="checkbox" onChange="evntToggleClicked();" data-toggle="toggle" data-onstyle="secondary" data-on="<i class='fa fa-play'></i> MQTT" data-off="MQTT <i class='fa fa-pause'></i>" data-size="sm"> 
-          <script>
-            $(function() {
-              $('#logMQTT').change(function() {
-                logMQTTEnabled = $(this).prop('checked');
-              })
-            })
-          </script>
+          <input id="logMQTT" type="checkbox" data-toggle="toggle" data-onstyle="secondary" data-on="<i class='fa fa-play'></i> MQTT" data-off="MQTT <i class='fa fa-pause'></i>" data-size="sm"> 
           <input id="logTicker" type="checkbox" data-toggle="toggle" data-onstyle="secondary" data-on="<i class='fa fa-play'></i> Ticker" data-off="Ticker <i class='fa fa-pause'></i>" data-size="sm"> 
         </div>
       </div>
@@ -235,4 +258,5 @@ if (!securePage($_SERVER['PHP_SELF'])) {
   </small>
 </div>
 <br>
+
 <?php require_once $abs_us_root.$us_url_root.'users/includes/html_footer.php'; ?>
