@@ -98,7 +98,10 @@ function updateDeviceList() {
             else devicestatus.setAttribute("style", "background:red;");
 
             devicestatusname.appendChild(devicestatus);
-            devicestatusname.innerHTML += "<span id='device-title'>"+dev.name+"</span>";
+            var devicetitle = document.createElement("span");
+            devicetitle.setAttribute("id","device-"+dev.code+"-"+dev.id+"-title");
+            devicetitle.innerHTML = dev.title;
+            devicestatusname.appendChild(devicetitle);
 
             var deviceconf = document.createElement("a");
             deviceconf.setAttribute("id","device-"+dev.code+"-"+dev.id+"-conf");
@@ -184,7 +187,7 @@ function updateDeviceList() {
  */
  function callNowConnected() {
     
-    MQTTSubTopic("devices/+/+/status", 0, callUpdateDevices );      // Subscribe to status topic
+    MQTTSubTopic("iot/devices/+/ids/+/online/#", 0, callUpdateDevices );      // Subscribe to status topic // TODO - move to function in core with callback
     
 }
 

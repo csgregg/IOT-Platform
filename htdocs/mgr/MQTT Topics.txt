@@ -1,0 +1,40 @@
+iot
+    /global
+        /mgnt
+            /cmd -> (JSON)
+            /status ->
+    /devices
+        /<short-code>
+            /mgnt
+                /cmd -> (JSON)
+                /status ->
+            /ids 
+                /<device id>
+                    /online <-            
+                    /mgnt
+                        /cmd -> (JSON) {req-res}
+                        /status ->
+                    /env
+                        /proc <-
+                        /board <-
+                        /serial -<
+                        /use <-
+                        /rel <-
+                        /bld <~
+                        /env <-
+                        /time <-
+                        /repo <-
+                    /ses
+                        /title <-
+                        /autoup <-
+                    /log
+                         /on <-
+                         /tick <-
+                         /level <-
+                         /json  (JSON)
+                    /op
+                        /title <-
+                        /msg
+                            / ... <-  (JSON) {req-res}
+                        /cmd
+                            / ... ->  (JSON) {req-res}

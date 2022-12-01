@@ -94,7 +94,6 @@ function callCoreDeviceEnv( topic, msg ) {
     if( topicparts[4] == "up" )     thisdevice.update = ( msg == "true" );
     if( topicparts[4] == "serl" )   thisdevice.serial = msg;
     if( topicparts[4] == "repo" )   thisdevice.repo = msg;
-    if( topicparts[4] == "titl" )   thisdevice.title = msg;
 
 }
 
@@ -108,9 +107,9 @@ function callCoreUpdateKnownDevice( topic, msg ) {
 
     // Device details
     const topicparts = topic.split("/");
-    var code = topicparts[1];
-    var id = topicparts[2]
-    var online = msg.toLowerCase() == "online";
+    var code = topicparts[2];
+    var id = topicparts[4];
+    var online = msg.toLowerCase() == "true";
     var name;
     var app;
     var description;
@@ -118,7 +117,7 @@ function callCoreUpdateKnownDevice( topic, msg ) {
     // Do we already know about this one?
     var devfound = coreKnownDevices.findIndex( devfound => devfound.statustopic === topic );
 
-    if( msg == "" ) {
+    if( topicparts[4] && msg == "" ) {
 
         // If blank message then forget device
         if( devfound != -1 ) {
@@ -136,6 +135,7 @@ function callCoreUpdateKnownDevice( topic, msg ) {
                 description = ""
                 code = "";
             } else {
+                if( title == "" ) title = name;
                 name = thisdevice.name;
                 description = thisdevice.description;
                 app = thisdevice.app;
@@ -149,18 +149,19 @@ function callCoreUpdateKnownDevice( topic, msg ) {
                     code        : code,
                     name        : name,
                     description : description,
+                    title       : title,
                     app         : app,
                     processeor  : "",
                     board       : "",
-                    peripherals : "",
+                    use         : "",
                     release     : "",
                     build       : "",
                     environment : "",
                     timestamp   : "",
                     update      : false,
                     serial      : "",
-                    repo        : "",
-                    title     : ""
+                    repo        : ""
+
                 }
             );
         } else {

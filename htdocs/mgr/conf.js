@@ -60,26 +60,34 @@ var logMQTTEnabled = false;         // Are we logging MQTT messages too?
     const topicparts = topic.split("/");
 
     // Update status
-    if( topicparts[4] == "on" ) loggingOn = (msg=="true");
-    if( topicparts[4] == "tick" ) loggingTick = (msg=="true");
-    if( topicparts[4] == "level" ) loggingLevel = Number(msg);
+    if( topicparts[4] == "on" ) {
+        loggingOn = (msg=="true");
+        if( loggingOn ) $('#logOn').bootstrapToggle('on');
+        else $('#logOn').bootstrapToggle('off');
+    }
 
-    // Update UI
-    if( loggingOn ) $('#logOn').bootstrapToggle('on');
-    else $('#logOn').bootstrapToggle('off');
+    if( topicparts[4] == "tick" ) {
+        loggingTick = (msg=="true");
+        if( loggingTick ) $('#logTicker').bootstrapToggle('on');
+        else $('#logTicker').bootstrapToggle('off');
+    }
 
-    if( loggingTick ) $('#logTicker').bootstrapToggle('on');
-    else $('#logTicker').bootstrapToggle('off');
-
-    // Update level buttons
-    document.getElementById("logLevel0").classList.remove("active");
-    document.getElementById("logLevel1").classList.remove("active");
-    document.getElementById("logLevel2").classList.remove("active");
-    document.getElementById("logLevel3").classList.remove("active");
-    document.getElementById("logLevel"+loggingLevel).classList.add("active");
+    if( topicparts[4] == "level" ) {
+        loggingLevel = Number(msg);
+        // Update level buttons
+        document.getElementById("logLevel0").classList.remove("active");
+        document.getElementById("logLevel1").classList.remove("active");
+        document.getElementById("logLevel2").classList.remove("active");
+        document.getElementById("logLevel3").classList.remove("active");
+        document.getElementById("logLevel"+loggingLevel).classList.add("active");
+    }
 
     // Log this message if logging MQTT
     if( logMQTTEnabled ) logMQTT( topic,msg );
+
+    if( topicparts[4] == "json" && loggingOn ) {
+        // TODO - decode msg JSON and add to table
+    }
 }
 
 
