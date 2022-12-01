@@ -100,7 +100,7 @@ function updateDeviceList() {
             devicestatusname.appendChild(devicestatus);
             var devicetitle = document.createElement("span");
             devicetitle.setAttribute("id","device-"+dev.code+"-"+dev.id+"-title");
-            devicetitle.innerHTML = dev.title;
+            devicetitle.innerHTML = dev.name;
             devicestatusname.appendChild(devicetitle);
 
             var deviceconf = document.createElement("a");
@@ -137,6 +137,8 @@ function updateDeviceList() {
             // Add card to deck
             var appdeck = document.getElementById("app-"+dev.app+"-devices");
             appdeck.appendChild(newdevicecard);
+
+            MQTTSubTopic("iot/devices/"+deviceCode+"/ids/"+deviceID+"/env/title", 0, callUpdateTitle );
 
         } else {
 
@@ -183,11 +185,23 @@ function updateDeviceList() {
 
 
 /**
+ * Called to update device
+ * @param {string} topic            Received topic
+ * @param {string} msg              Received message
+ */
+ function callUpdateTitle( topic, msg ){
+
+    callCoreDeviceEnv( topic, msg );           
+
+    document.getElementById( "device-"+code+"-"+id+"-title" ).innerHTML = msg;
+}
+
+/**
  * Called when connected to broker
  */
  function callNowConnected() {
     
-    MQTTSubTopic("iot/devices/+/ids/+/online/#", 0, callUpdateDevices );      // Subscribe to status topic // TODO - move to function in core with callback
+    MQTTSubTopic("iot/devices/+/ids/+/online", 0, callUpdateDevices );      // Subscribe to status topic // TODO - move to function in core with callback
     
 }
 

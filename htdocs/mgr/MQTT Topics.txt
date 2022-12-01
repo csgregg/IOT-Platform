@@ -16,7 +16,7 @@ iot
                         /status ->
                     /env
                         /proc <-
-                        /board <-
+                        /brd <-
                         /serial -<
                         /use <-
                         /rel <-
@@ -24,7 +24,6 @@ iot
                         /env <-
                         /time <-
                         /repo <-
-                    /ses
                         /title <-
                         /autoup <-
                     /log

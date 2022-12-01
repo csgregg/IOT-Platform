@@ -81,20 +81,21 @@ function callCoreDeviceEnv( topic, msg ) {
     var code = topicparts[1];
     var id = topicparts[2]
 
-    // TODO - error checking
     var thisdevice = coreKnownDevices.find( thisdevice => ( thisdevice.code === code ) && ( thisdevice.id === id ) );
 
-    if( topicparts[4] == "proc" )   thisdevice.processeor = msg;
-    if( topicparts[4] == "brd" )    thisdevice.board = msg;
-    if( topicparts[4] == "peri" )   thisdevice.peripherals = msg;
-    if( topicparts[4] == "rel" )    thisdevice.release = msg;
-    if( topicparts[4] == "bld" )    thisdevice.build = msg;
-    if( topicparts[4] == "env" )    thisdevice.environment = msg;
-    if( topicparts[4] == "time" )   thisdevice.timestamp = msg;
-    if( topicparts[4] == "up" )     thisdevice.update = ( msg == "true" );
-    if( topicparts[4] == "serl" )   thisdevice.serial = msg;
-    if( topicparts[4] == "repo" )   thisdevice.repo = msg;
-
+    if( thisdevice != undefined ) {
+        if( topicparts[4] == "proc" )   thisdevice.processeor = msg;
+        if( topicparts[4] == "brd" )    thisdevice.board = msg;
+        if( topicparts[4] == "use" )    thisdevice.use = msg;
+        if( topicparts[4] == "rel" )    thisdevice.release = msg;
+        if( topicparts[4] == "bld" )    thisdevice.build = msg;
+        if( topicparts[4] == "env" )    thisdevice.environment = msg;
+        if( topicparts[4] == "time" )   thisdevice.timestamp = msg;
+        if( topicparts[4] == "autoup" ) thisdevice.update = ( msg == "true" );
+        if( topicparts[4] == "serial" ) thisdevice.serial = msg;
+        if( topicparts[4] == "repo" )   thisdevice.repo = msg;
+        if( topicparts[4] == "title" )  thisdevice.title = msg;
+    }
 }
 
 
@@ -117,7 +118,7 @@ function callCoreUpdateKnownDevice( topic, msg ) {
     // Do we already know about this one?
     var devfound = coreKnownDevices.findIndex( devfound => devfound.statustopic === topic );
 
-    if( topicparts[4] && msg == "" ) {
+    if( msg == "" ) {
 
         // If blank message then forget device
         if( devfound != -1 ) {
@@ -135,7 +136,6 @@ function callCoreUpdateKnownDevice( topic, msg ) {
                 description = ""
                 code = "";
             } else {
-                if( title == "" ) title = name;
                 name = thisdevice.name;
                 description = thisdevice.description;
                 app = thisdevice.app;
@@ -149,8 +149,8 @@ function callCoreUpdateKnownDevice( topic, msg ) {
                     code        : code,
                     name        : name,
                     description : description,
-                    title       : title,
                     app         : app,
+                    title       : "",
                     processeor  : "",
                     board       : "",
                     use         : "",
@@ -161,7 +161,6 @@ function callCoreUpdateKnownDevice( topic, msg ) {
                     update      : false,
                     serial      : "",
                     repo        : ""
-
                 }
             );
         } else {
