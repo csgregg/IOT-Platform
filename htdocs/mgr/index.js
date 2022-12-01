@@ -49,7 +49,7 @@ function updateDeviceList() {
 
             var newappcontainer = document.createElement("div");
             newappcontainer.setAttribute("id","app-"+app.code);
-            newappcontainer.setAttribute("class","container border border-dark pt-3 pl-4 pb-3 pr-4");
+            newappcontainer.setAttribute("class","container border-top border-dark pt-3 pl-4 pb-3 pr-4");
 
             var appname = document.createElement("h5");
             appname.innerHTML = app.name;
@@ -138,7 +138,7 @@ function updateDeviceList() {
             var appdeck = document.getElementById("app-"+dev.app+"-devices");
             appdeck.appendChild(newdevicecard);
 
-            MQTTSubTopic("iot/devices/"+deviceCode+"/ids/"+deviceID+"/env/title", 0, callUpdateTitle );
+            MQTTSubTopic("iot/devices/"+dev.code+"/ids/"+dev.id+"/env/title", 0, callUpdateTitle );
 
         } else {
 
@@ -191,9 +191,14 @@ function updateDeviceList() {
  */
  function callUpdateTitle( topic, msg ){
 
-    callCoreDeviceEnv( topic, msg );           
-
+    callCoreDeviceEnv( topic, msg ); 
+    
+    const topicparts = topic.split("/");
+    var code = topicparts[2];
+    var id = topicparts[4];
+    
     document.getElementById( "device-"+code+"-"+id+"-title" ).innerHTML = msg;
+
 }
 
 /**
