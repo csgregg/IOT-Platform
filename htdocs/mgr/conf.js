@@ -60,19 +60,19 @@ var logMQTTEnabled = false;         // Are we logging MQTT messages too?
     const topicparts = topic.split("/");
 
     // Update status
-    if( topicparts[4] == "on" ) {
+    if( topicparts[6] == "on" ) {
         loggingOn = (msg=="true");
         if( loggingOn ) $('#logOn').bootstrapToggle('on');
         else $('#logOn').bootstrapToggle('off');
     }
 
-    if( topicparts[4] == "tick" ) {
+    if( topicparts[6] == "tick" ) {
         loggingTick = (msg=="true");
         if( loggingTick ) $('#logTicker').bootstrapToggle('on');
         else $('#logTicker').bootstrapToggle('off');
     }
 
-    if( topicparts[4] == "level" ) {
+    if( topicparts[6] == "level" ) {
         loggingLevel = Number(msg);
         // Update level buttons
         document.getElementById("logLevel0").classList.remove("active");
@@ -85,7 +85,7 @@ var logMQTTEnabled = false;         // Are we logging MQTT messages too?
     // Log this message if logging MQTT
     if( logMQTTEnabled ) logMQTT( topic,msg );
 
-    if( topicparts[4] == "json" && loggingOn ) {
+    if( topicparts[6] == "json" && loggingOn ) {
         // TODO - decode msg JSON and add to table
     }
 }
@@ -138,11 +138,10 @@ function logMQTT( topic, msg ) {
  */
 function callEnvUpdate( topic, msg ) {
     callCoreDeviceEnv( topic, msg );
-
     const topicparts = topic.split("/");
     
     // Update GitHub repo and latest release details
-    if( topicparts[4] == "repo" ) {
+    if( topicparts[6] == "repo" ) {
 
         var githubrepo = new githubassetfetcher(thisDevice.repo,"csgregg");
         var repoURL = "https://github.com/csgregg/"+thisDevice.repo;
@@ -168,7 +167,7 @@ function callEnvUpdate( topic, msg ) {
     document.getElementById("curRelease").innerHTML = thisDevice.release;
     document.getElementById("curEnv").innerHTML = thisDevice.environment+" ("+thisDevice.build+")";
 
-    if( topicparts[4] == "time" ) {
+    if( topicparts[6] == "time" ) {
         var timestamp = new Date(thisDevice.timestamp);
         document.getElementById("curTimestamp").innerHTML = timestamp.toLocaleString( 'en-GB', {
             day: 'numeric',
@@ -189,14 +188,22 @@ function callEnvUpdate( topic, msg ) {
     document.getElementById("device-peri").innerHTML = thisDevice.peripherals;
 
     // Set board type
-    if( topicparts[4] == "brd" ) {
-        var board = coreBoardTypes.find( board => board.code === thisDevice.board );        // TODO error handling
-        document.getElementById("device-proc").innerHTML = board.processeor;
-        document.getElementById("device-board").innerHTML = board.name;  
+    if( topicparts[6] == "brd" ) {
+        var board = coreBoardTypes.find( board => board.code === thisDevice.board );
+
+        if( board == undefined ) {
+            document.getElementById("device-proc").innerHTML = "Unknown";
+            document.getElementById("device-board").innerHTML = "Unknown";  
+        } else {
+            document.getElementById("device-proc").innerHTML = board.processor;
+            document.getElementById("device-board").innerHTML = board.name;  
+        }
+
     }
 
     // Update title
-    if( thisDevice.knownas != "" ) document.getElementById("device-title").innerHTML = thisDevice.title+" ("+thisDevice.name+") - "+thisDevice.id;
+    if( thisDevice.title == "" ) document.getElementById("device-title").innerHTML = thisDevice.name+" - ID: "+thisDevice.id;
+    else document.getElementById("device-title").innerHTML = thisDevice.title+" ("+thisDevice.name+" - ID: "+thisDevice.id+")";
 
     // Log this message if logging MQTT
     if( logMQTTEnabled ) logMQTT( topic,msg );
@@ -220,15 +227,23 @@ function callUpdateDevice( topic, msg ){
         // Update UI with basics
         document.getElementById("device-code").innerHTML = thisDevice.code;
         document.getElementById("device-desc").innerHTML = thisDevice.description;
-        document.getElementById("device-title").innerHTML = thisDevice.name+" - "+thisDevice.id;;
+        document.getElementById("device-title").innerHTML = thisDevice.name+" - ID: "+thisDevice.id;
 
-        var app = coreAppList.find( app => app.code === thisDevice.app );           // TODO error handling
-        document.getElementById("app-name").innerHTML = app.name;
-        document.getElementById("app-desc").innerHTML = app.description;
-        document.getElementById("app-launch").setAttribute("href",app.url+"?device="+thisDevice.id);
+        var app = coreAppList.find( app => app.code === thisDevice.app );
 
-        MQTTSubTopic("devices/"+deviceCode+"/"+deviceID+"/env/#", 0, callEnvUpdate );         // Now subscribe to full device env/
-        MQTTSubTopic("devices/"+deviceCode+"/"+deviceID+"/log/#", 0, callLogUpdate );         // Subscribe to log/
+        if( app == undefined ) {
+            document.getElementById("app-name").innerHTML = "Unknown";
+            document.getElementById("app-desc").innerHTML = "Unknown";
+            // TODO - disable URL
+            // TODO - disable URLs which device offline
+        } else {
+            document.getElementById("app-name").innerHTML = app.name;
+            document.getElementById("app-desc").innerHTML = app.description;
+            document.getElementById("app-launch").setAttribute("href",app.url+"?device="+thisDevice.id);
+        }
+
+        coreGetDeviceEnv( deviceCode ,deviceID, callEnvUpdate );                                 // Now subscribe to full device env/
+        coreStartLogging( deviceCode, deviceID, callLogUpdate );         // Subscribe to log/
     }
 
     // Update status dot
@@ -249,7 +264,7 @@ function callUpdateDevice( topic, msg ){
  */
  function callDeviceDeleted( code, id ) {
 
-    console.log("Deleted")      // TODO handle this
+    console.log("Deleted")      // TODO handle what happens if device deleted while on conf page
 
 }
 
@@ -260,7 +275,7 @@ function callUpdateDevice( topic, msg ){
 function callNowConnected() {
 
     // Subscribe to status topic
-    MQTTSubTopic("devices/"+deviceCode+"/"+deviceID+"/status", 0, callUpdateDevice );
+    coreFindKnownDevice( deviceCode, deviceID, callUpdateDevice );
 
 }
 

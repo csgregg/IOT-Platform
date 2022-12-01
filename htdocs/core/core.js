@@ -57,7 +57,7 @@ var coreBoardTypes = [
     {
         code        : "d1_mini",
         name        : "Wemos D1 Mini",
-        processeor  : "ESP8266"
+        processor  : "ESP8266"
     }
 ]
 
@@ -78,25 +78,70 @@ function callCoreDeviceEnv( topic, msg ) {
 
     // Device details
     const topicparts = topic.split("/");
-    var code = topicparts[1];
-    var id = topicparts[2]
+    var code = topicparts[2];
+    var id = topicparts[4]
 
-    var thisdevice = coreKnownDevices.find( thisdevice => ( thisdevice.code === code ) && ( thisdevice.id === id ) );
+    var device = coreKnownDevices.find( device => ( device.code === code ) && ( device.id === id ) );
 
-    if( thisdevice != undefined ) {
-        if( topicparts[4] == "proc" )   thisdevice.processeor = msg;
-        if( topicparts[4] == "brd" )    thisdevice.board = msg;
-        if( topicparts[4] == "use" )    thisdevice.use = msg;
-        if( topicparts[4] == "rel" )    thisdevice.release = msg;
-        if( topicparts[4] == "bld" )    thisdevice.build = msg;
-        if( topicparts[4] == "env" )    thisdevice.environment = msg;
-        if( topicparts[4] == "time" )   thisdevice.timestamp = msg;
-        if( topicparts[4] == "autoup" ) thisdevice.update = ( msg == "true" );
-        if( topicparts[4] == "serial" ) thisdevice.serial = msg;
-        if( topicparts[4] == "repo" )   thisdevice.repo = msg;
-        if( topicparts[4] == "title" )  thisdevice.title = msg;
+    if( device != undefined ) {
+        if( topicparts[6] == "proc" )   device.processor = msg;
+        if( topicparts[6] == "brd" )    device.board = msg;
+        if( topicparts[6] == "use" )    device.use = msg;
+        if( topicparts[6] == "rel" )    device.release = msg;
+        if( topicparts[6] == "bld" )    device.build = msg;
+        if( topicparts[6] == "env" )    device.environment = msg;
+        if( topicparts[6] == "time" )   device.timestamp = msg;
+        if( topicparts[6] == "autoup" ) device.update = ( msg == "true" );
+        if( topicparts[6] == "serial" ) device.serial = msg;
+        if( topicparts[6] == "repo" )   device.repo = msg;
+        if( topicparts[6] == "title" )  device.title = msg;
     }
 }
+
+
+/**
+ * Called to find out which devices are there
+ * @param {Function} callback            Function to call when messages arrive
+ */
+function coreFindKnownDevices( callback ) {
+    MQTTSubTopic("iot/devices/+/ids/+/online", 0, callback );      // Subscribe to status topic
+ }
+
+
+/**
+ * Called to get device environment
+ * @param {Function} callback            Function to call when messages arrive
+ */
+  function coreGetDeviceEnv( code, id, callback ) {
+    MQTTSubTopic("iot/devices/"+code+"/ids/"+id+"/env/#", 0, callback );      // Now subscribe to full device env/
+ }
+
+
+/**
+ * Called to start logging functionality
+ * @param {Function} callback            Function to call when messages arrive
+ */
+ function coreStartLogging( code, id, callback ) {
+    MQTTSubTopic("iot/devices/"+code+"/ids/"+id+"/log/#", 0, callback );      // Subscribe to log/
+ }
+
+
+/**
+ * Called to find specific device
+ * @param {Function} callback            Function to call when messages arrive
+ */
+function coreFindKnownDevice( code, id, callback ) {
+    MQTTSubTopic("iot/devices/"+code+"/ids/"+id+"/online", 0, callback );      // Subscribe to status topic
+ }
+
+
+/**
+ * Called to find update device title
+ * @param {Function} callback            Function to call when messages arrive
+ */
+function coreUpdateDeviceTitle( code, id, callback ) {
+    MQTTSubTopic("iot/devices/"+code+"/ids/"+id+"/env/title", 0, callback );
+ }
 
 
 /**
@@ -123,22 +168,27 @@ function callCoreUpdateKnownDevice( topic, msg ) {
         // If blank message then forget device
         if( devfound != -1 ) {
             coreKnownDevices.splice(devfound, 1);
-            callDeviceDeleted(code,id);                 // Call page function (needs to exist) TODO - error handling
+            try {
+                callDeviceDeleted(code,id);                 // Call page function (needs to exist)
+            } catch(err) {
+                console.log("Page does not have a device delete function");
+            }
+            
         }
 
     } else {
         if( devfound == -1 ) {      // New device
 
-            var thisdevice = coreDeviceTypes.find(thisdevice => thisdevice.code === code);
+            var device = coreDeviceTypes.find(device => device.code === code);
 
-            if( thisdevice == undefined ) {             // Don't know this device code
+            if( device == undefined ) {             // Don't know this device code
                 name = "Unrecognised";
                 description = ""
                 code = "";
             } else {
-                name = thisdevice.name;
-                description = thisdevice.description;
-                app = thisdevice.app;
+                name = device.name;
+                description = device.description;
+                app = device.app;
             }
 
             coreKnownDevices.push(                      // Add device to known devices
@@ -151,7 +201,7 @@ function callCoreUpdateKnownDevice( topic, msg ) {
                     description : description,
                     app         : app,
                     title       : "",
-                    processeor  : "",
+                    processor  : "",
                     board       : "",
                     use         : "",
                     release     : "",

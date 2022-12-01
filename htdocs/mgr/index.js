@@ -69,85 +69,91 @@ function updateDeviceList() {
     coreKnownDevices.forEach(function(dev, index) {         // Add or update each known device in turn
 
         var devicecard = document.getElementById("device-"+dev.code+"-"+dev.id);
-        var thisapp = coreAppList.find(thisapp => thisapp.code === dev.app);            // TODO Error checking
+        var thisapp = coreAppList.find(thisapp => thisapp.code === dev.app);
 
-        if( devicecard == null ) {
-
-            // Create device card
-            var newdevicecard = document.createElement("div");
-            newdevicecard.setAttribute("id","device-"+dev.code+"-"+dev.id);
-            newdevicecard.setAttribute("class","card m-2");
-            newdevicecard.setAttribute("style","flex: 0 0 19rem;");
-
-            // Add header
-            var newcardheader = document.createElement("div");
-            newcardheader.setAttribute("class","card-header");
-
-            var devicename = document.createElement("h5");
-            devicename.setAttribute("id","device-"+dev.code+"-"+dev.id+"-name");
-
-            var devicestatusname = document.createElement("div");
-            devicestatusname.setAttribute("class","pull-left");
-
-            // Set status
-            var devicestatus = document.createElement("span");
-            devicestatus.setAttribute("id","device-"+dev.code+"-"+dev.id+"-status");
-            devicestatus.setAttribute("class","statusdot mr-3");
-
-            if( dev.status ) devicestatus.setAttribute("style", "background:green;");
-            else devicestatus.setAttribute("style", "background:red;");
-
-            devicestatusname.appendChild(devicestatus);
-            var devicetitle = document.createElement("span");
-            devicetitle.setAttribute("id","device-"+dev.code+"-"+dev.id+"-title");
-            devicetitle.innerHTML = dev.name;
-            devicestatusname.appendChild(devicetitle);
-
-            var deviceconf = document.createElement("a");
-            deviceconf.setAttribute("id","device-"+dev.code+"-"+dev.id+"-conf");
-            deviceconf.setAttribute("class","pull-right");
-            deviceconf.setAttribute("href","conf.php?code="+dev.code+"&id="+dev.id);
-            deviceconf.innerHTML = "<span class='fa fa-fw fa-cogs' style='color:grey'></span>";
-
-            devicename.appendChild(devicestatusname);
-            devicename.appendChild(deviceconf);
-            newcardheader.appendChild(devicename);
-            newdevicecard.appendChild(newcardheader);
-
-            // Card body
-            var newcardhbody = document.createElement("div");
-            newcardhbody.setAttribute("class","card-body");
-
-            var devicetext = document.createElement("div");
-            devicetext.setAttribute("id","device-"+dev.code+"-"+dev.id+"-details");
-            devicetext.setAttribute("class","card-text mb-3");
-            devicetext.innerHTML = dev.description;
-
-            var applaunch = document.createElement("a");
-            applaunch.setAttribute("id","device-"+dev.code+"-"+dev.id+"-launch");
-            applaunch.setAttribute("class","btn btn-primary");
-            applaunch.setAttribute("href",thisapp.url+"?device="+dev.id);
-            applaunch.setAttribute("target","_blank");
-            applaunch.innerHTML = "Open &raquo;";
-
-            newcardhbody.appendChild(devicetext);
-            newcardhbody.appendChild(applaunch);
-            newdevicecard.appendChild(newcardhbody);
-
-            // Add card to deck
-            var appdeck = document.getElementById("app-"+dev.app+"-devices");
-            appdeck.appendChild(newdevicecard);
-
-            MQTTSubTopic("iot/devices/"+dev.code+"/ids/"+dev.id+"/env/title", 0, callUpdateTitle );
-
+        if( thisapp == undefined ) {
+            console.log("Unknown app - can't display");
         } else {
 
-            // Update status
-            var updatestatus = document.getElementById("device-"+dev.code+"-"+dev.id+"-status");
+            // Add to App section
+            if( devicecard == null ) {
 
-            if( dev.status ) updatestatus.setAttribute("style","background:green;");
-            else updatestatus.setAttribute("style","background:red;");
+                // Create device card
+                var newdevicecard = document.createElement("div");
+                newdevicecard.setAttribute("id","device-"+dev.code+"-"+dev.id);
+                newdevicecard.setAttribute("class","card m-2");
+                newdevicecard.setAttribute("style","flex: 0 0 19rem;");
+    
+                // Add header
+                var newcardheader = document.createElement("div");
+                newcardheader.setAttribute("class","card-header");
+    
+                var devicename = document.createElement("h5");
+                devicename.setAttribute("id","device-"+dev.code+"-"+dev.id+"-name");
+    
+                var devicestatusname = document.createElement("div");
+                devicestatusname.setAttribute("class","pull-left");
+    
+                // Set status
+                var devicestatus = document.createElement("span");
+                devicestatus.setAttribute("id","device-"+dev.code+"-"+dev.id+"-status");
+                devicestatus.setAttribute("class","statusdot mr-3");
+    
+                if( dev.status ) devicestatus.setAttribute("style", "background:green;");
+                else devicestatus.setAttribute("style", "background:red;");
+    
+                devicestatusname.appendChild(devicestatus);
+                var devicetitle = document.createElement("span");
+                devicetitle.setAttribute("id","device-"+dev.code+"-"+dev.id+"-title");
+                devicetitle.innerHTML = dev.name;
+                devicestatusname.appendChild(devicetitle);
+    
+                var deviceconf = document.createElement("a");
+                deviceconf.setAttribute("id","device-"+dev.code+"-"+dev.id+"-conf");
+                deviceconf.setAttribute("class","pull-right");
+                deviceconf.setAttribute("href","conf.php?code="+dev.code+"&id="+dev.id);
+                deviceconf.innerHTML = "<span class='fa fa-fw fa-cogs' style='color:grey'></span>";
+    // TODO - disable URLs which device offline
+                devicename.appendChild(devicestatusname);
+                devicename.appendChild(deviceconf);
+                newcardheader.appendChild(devicename);
+                newdevicecard.appendChild(newcardheader);
+    
+                // Card body
+                var newcardhbody = document.createElement("div");
+                newcardhbody.setAttribute("class","card-body");
+    
+                var devicetext = document.createElement("div");
+                devicetext.setAttribute("id","device-"+dev.code+"-"+dev.id+"-details");
+                devicetext.setAttribute("class","card-text mb-3");
+                devicetext.innerHTML = dev.description;
+    
+                var applaunch = document.createElement("a");
+                applaunch.setAttribute("id","device-"+dev.code+"-"+dev.id+"-launch");
+                applaunch.setAttribute("class","btn btn-primary");
+                applaunch.setAttribute("href",thisapp.url+"?device="+dev.id);
+                applaunch.setAttribute("target","_blank");
+                applaunch.innerHTML = "Open &raquo;";
+    
+                newcardhbody.appendChild(devicetext);
+                newcardhbody.appendChild(applaunch);
+                newdevicecard.appendChild(newcardhbody);
+    
+                // Add card to deck
+                var appdeck = document.getElementById("app-"+dev.app+"-devices");
+                appdeck.appendChild(newdevicecard);
 
+                coreUpdateDeviceTitle( dev.code, dev.id, callUpdateTitle );
+    
+            } else {
+    
+                // Update status
+                var updatestatus = document.getElementById("device-"+dev.code+"-"+dev.id+"-status");
+    
+                if( dev.status ) updatestatus.setAttribute("style","background:green;");
+                else updatestatus.setAttribute("style","background:red;");
+    
+            }
         }
 
     });
@@ -206,7 +212,7 @@ function updateDeviceList() {
  */
  function callNowConnected() {
     
-    MQTTSubTopic("iot/devices/+/ids/+/online", 0, callUpdateDevices );      // Subscribe to status topic // TODO - move to function in core with callback
+    coreFindKnownDevices( callUpdateDevices );          // Find out what devices are there
     
 }
 
