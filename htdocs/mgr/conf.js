@@ -106,7 +106,6 @@ var logMQTTEnabled = false;         // Are we logging MQTT messages too?
     if( logMQTTEnabled ) logMQTT( topic,msg );
 
     if( topicparts[6] == "msg" && loggingOn ) {
-        // TODO - decode msg JSON and add to table
 
         var table = $('#logTable').DataTable();     // Get the table
 
@@ -116,22 +115,45 @@ var logMQTTEnabled = false;         // Are we logging MQTT messages too?
         var strTag = "";
         var strType = "";
         var strHeap = "";
-        var strTime = "";
+        var strtime = "";
 
         try {
             json = JSON.parse(msg);
             validMsg = true;
         } catch (e) { }
 
+        
         if( validMsg ) {
             strMsg = json.pld.msg;
             strTag = json.pld.tag;
             strType = json.pld.type;
-            strTime = json.env.time;
             strHeap = json.env.heap;
+
+            var time = new Date(json.env.time);
+            strTime = time.toLocaleString( 'en-GB', {
+                day: 'numeric',
+                year: 'numeric',
+                month: 'short', 
+                hour: 'numeric',
+                minute: 'numeric',
+                second: 'numeric',
+                timeZoneName: 'short'
+                });
         }
         else {
             strMsg = "Corrupt log message";
+            strType = "System";
+            strTag = "DEBUG";
+            var now = new Date();
+            strTime = now.toLocaleString( 'en-GB', {
+                day: 'numeric',
+                year: 'numeric',
+                month: 'short', 
+                hour: 'numeric',
+                minute: 'numeric',
+                second: 'numeric',
+                timeZoneName: 'short'
+                });
         }
 
         // Add the row
@@ -177,6 +199,7 @@ function logMQTT( topic, msg ) {
             hour: 'numeric',
             minute: 'numeric',
             second: 'numeric',
+            timeZoneName: 'short'
             }),
         "MQTT",
         strTag,
@@ -215,7 +238,9 @@ function callEnvUpdate( topic, msg ) {
             hour: 'numeric',
             minute: 'numeric',
             second: 'numeric',
+            timeZoneName: 'short'
         });
+        // TODO implement moment.js for all date handling
 
     }
 
@@ -232,6 +257,7 @@ function callEnvUpdate( topic, msg ) {
             hour: 'numeric',
             minute: 'numeric',
             second: 'numeric',
+            timeZoneName: 'short'
             });
     }
 
