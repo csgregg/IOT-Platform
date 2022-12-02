@@ -29,6 +29,26 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. */
 
 
+
+/* Log Message JSON Format
+
+{
+    "pld"   : {
+        "tag"   : "123456",
+        "type"  : "12345678",
+        "msg"   : "123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890"
+    },
+    "env"   : {
+        "time": "yyyy-mm-ddThh:mm:ss+0000",
+        "heap": "1234567890"
+    }
+}
+
+*/
+
+
+
+
 //////////
 // Globals
 
@@ -85,8 +105,44 @@ var logMQTTEnabled = false;         // Are we logging MQTT messages too?
     // Log this message if logging MQTT
     if( logMQTTEnabled ) logMQTT( topic,msg );
 
-    if( topicparts[6] == "json" && loggingOn ) {
+    if( topicparts[6] == "msg" && loggingOn ) {
         // TODO - decode msg JSON and add to table
+
+        var table = $('#logTable').DataTable();     // Get the table
+
+        var json;
+        var validMsg = false;
+        var strMsg = ""
+        var strTag = "";
+        var strType = "";
+        var strHeap = "";
+        var strTime = "";
+
+        try {
+            json = JSON.parse(msg);
+            validMsg = true;
+        } catch (e) { }
+
+        if( validMsg ) {
+            strMsg = json.pld.msg;
+            strTag = json.pld.tag;
+            strType = json.pld.type;
+            strTime = json.env.time;
+            strHeap = json.env.heap;
+        }
+        else {
+            strMsg = "Corrupt log message";
+        }
+
+        // Add the row
+        table.row.add( [
+            table.rows().count()+1,
+            strTime,
+            strType,
+            strTag,
+            strMsg,
+            strHeap
+        ] ).draw();
     }
 }
 

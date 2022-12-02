@@ -26,11 +26,13 @@ iot
                         /repo <-
                         /title <-
                         /autoup <-
+                        /ip <-
+                        /ssif <-
                     /log
                          /on <-
                          /tick <-
                          /level <-
-                         /json  (JSON)
+                         /msg  (JSON)
                     /op
                         /title <-
                         /msg
