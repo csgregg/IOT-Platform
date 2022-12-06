@@ -64,6 +64,16 @@ var loggingTick = false;            // Logging ticker
 
 var logMQTTEnabled = false;         // Are we logging MQTT messages too?
 
+var modaloptions = {                // Modal set up
+    title           : "",           // Modal title
+    message         : "",           // Modal message
+    btnPrimary      : "",           // Primary button text
+    btnSecondary    : "",           // Secondary button text
+    callPrimary     : function(){}, // Called whem primary button clicked
+    callSecondary   : function(){}, // Called whem secondary button clicked
+    callClose       : function(){}  // Called whem closed clicked
+ };
+
 
 ////////////////////
 // Logging Functions
@@ -316,8 +326,6 @@ function callUpdateDevice( topic, msg ){
         if( app == undefined ) {
             document.getElementById("app-name").innerHTML = "Unknown";
             document.getElementById("app-desc").innerHTML = "Unknown";
-            // TODO - disable URL
-            // TODO - disable URLs which device offline
         } else {
             document.getElementById("app-name").innerHTML = app.name;
             document.getElementById("app-desc").innerHTML = app.description;
@@ -328,10 +336,15 @@ function callUpdateDevice( topic, msg ){
         coreStartLogging( deviceCode, deviceID, callLogUpdate );         // Subscribe to log/
     }
 
-    // Update status dot
-    var updatestatus = document.getElementById("device-status");
-    if( thisDevice.status ) updatestatus.setAttribute("style","background:green;");
-    else updatestatus.setAttribute("style","background:red;");
+    // Update status and controls
+
+    if( thisDevice.status ) {
+        $("#device-status").css("background","green");
+        $("#app-launch").removeClass("disabled");
+    } else {
+        $("#device-status").css("background","red");
+        $("#app-launch").addClass("disabled");
+    }
     
     // Log this message if logging MQTT
     if( logMQTTEnabled ) logMQTT( topic,msg );
@@ -373,8 +386,217 @@ $(function() {
     deviceID = urlParams.get('id');
 
     // Set up listeners
+    ///////////////////
+
+    // Logging MQTT toggle change
     $('#logMQTT').change(function() {
       logMQTTEnabled = $(this).prop('checked');
+    });
+
+    // Auto update firmware toggle clicked
+    $('#autoupdate').closest('.togglewrapper').on('click',function(e) {
+
+        // Stop togge toggling until dialog completes
+        e.preventDefault(); e.stopPropagation();
+
+        // Setup confirm modal
+        modaloptions.btnPrimary = "Yes";
+        modaloptions.btnSecondary = "Cancel";
+        modaloptions.title = $(this).find('input').prop('checked') ? "Turn off firmware auto update" : "Turn on firmware auto update";
+        modaloptions.message = "Are you sure?";
+        modaloptions.callPrimary = function(){
+
+            // TODO - Don't toggle this in real life, let message acknowledge update this
+            $('#autoupdate').bootstrapToggle('toggle');
+
+            // TODO - replace with send MQTT message
+            console.log($('#autoupdate').prop('checked') ? "Turn on firmware auto update" : "Turn off firmware auto update");
+        
+        };
+
+        $('#dlgConfirm').modal('show');
+
+    });
+
+    // Logging ticker toggle clicked
+    $('#logTicker').closest('.togglewrapper').on('click',function(e) {
+
+        // Stop togge toggling until dialog completes
+        e.preventDefault(); e.stopPropagation();
+
+        // Setup confirm modal
+        modaloptions.btnPrimary = "Yes";
+        modaloptions.btnSecondary = "Cancel";
+        modaloptions.title = $(this).find('input').prop('checked') ? "Turn ticker off" : "Turn ticker on";
+        modaloptions.message = "Are you sure?";
+        modaloptions.callPrimary = function(){
+
+            // TODO - Don't toggle this in real life, let message acknowledge update this
+            $('#logTicker').bootstrapToggle('toggle');
+
+            // TODO - replace with send MQTT message
+            console.log($('#logTicker').prop('checked') ? "Turn ticker on" : "Turn ticker off");
+        
+        };
+
+        $('#dlgConfirm').modal('show');
+
+    });
+
+    // Logging on/off toggle clicked
+    $('#logOn').closest('.togglewrapper').on('click',function(e) {
+
+        // Stop togge toggling until dialog completes
+        e.preventDefault(); e.stopPropagation();
+
+        // Setup confirm modal
+        modaloptions.btnPrimary = "Yes";
+        modaloptions.btnSecondary = "Cancel";
+        modaloptions.title = $(this).find('input').prop('checked') ? "Turn off logging" : "Turn on logging";
+        modaloptions.message = "Are you sure?";
+        modaloptions.callPrimary = function(){
+
+            // TODO - Don't toggle this in real life, let message acknowledge update this
+            $('#logOn').bootstrapToggle('toggle');
+
+            // TODO - replace with send MQTT message
+            console.log($('#logOn').prop('checked') ? "Turn on logging" : "Turn off logging");
+        
+        };
+
+        $('#dlgConfirm').modal('show');
+
+    });
+
+    // Update firmware clicked
+    $('#requestupdate').on('click',function(e) {
+        
+        // Setup confirm modal
+        modaloptions.btnPrimary = "Yes";
+        modaloptions.btnSecondary = "Cancel";
+        modaloptions.title = "Update firmware now";
+        modaloptions.message = "Are you sure?";
+        modaloptions.callPrimary = function(){
+            // TODO - replace with send MQTT message
+            console.log(modaloptions.title);
+        };
+
+        $('#dlgConfirm').modal('show');
+        
+    });
+
+    // Update restart clicked
+    $('#requestrestart').on('click',function(e) {
+    
+        // Setup confirm modal
+        modaloptions.btnPrimary = "Yes";
+        modaloptions.btnSecondary = "Cancel";
+        modaloptions.title = "Restart device now";
+        modaloptions.message = "Are you sure?";
+        modaloptions.callPrimary = function(){
+            // TODO - replace with send MQTT message
+            console.log(modaloptions.title);
+        };
+
+        $('#dlgConfirm').modal('show');
+        
+    });
+
+    // Reset all settings clicked
+    $('#requestrstall').on('click',function(e) {
+
+        // Setup confirm modal
+        modaloptions.btnPrimary = "Yes";
+        modaloptions.btnSecondary = "Cancel";
+        modaloptions.title = "Reset all settings";
+        modaloptions.message = "Are you sure?";
+        modaloptions.callPrimary = function(){
+            // TODO - replace with send MQTT message
+            console.log(modaloptions.title);
+        };
+
+        $('#dlgConfirm').modal('show');
+        
+    });
+
+    // Reset network settings clicked
+    $('#requestrstnetwork').on('click',function(e) {
+
+        // Setup confirm modal
+        modaloptions.btnPrimary = "Yes";
+        modaloptions.btnSecondary = "Cancel";
+        modaloptions.title = "Reset network settings";
+        modaloptions.message = "Are you sure?";
+        modaloptions.callPrimary = function(){
+            // TODO - replace with send MQTT message
+            console.log(modaloptions.title);
+        };
+
+        $('#dlgConfirm').modal('show');
+        
+    });
+
+    // Reset time/locatiom settings clicked
+    $('#requestrsttimeloc').on('click',function(e) {
+
+        // Setup confirm modal
+        modaloptions.btnPrimary = "Yes";
+        modaloptions.btnSecondary = "Cancel";
+        modaloptions.title = "Reset time/locatiom settings";
+        modaloptions.message = "Are you sure?";
+        modaloptions.callPrimary = function(){
+            // TODO - replace with send MQTT message
+            console.log(modaloptions.title);
+        };
+
+        $('#dlgConfirm').modal('show');
+        
+    });
+
+    // Set logging level to critical
+    $('#logLevel').find('.btn').on('click',function(e) {
+        e.preventDefault(); e.stopPropagation();
+
+        // Nasty way to find out which button is pressed
+        var levelName = this.getElementsByTagName('span')[0].innerHTML
+        var btnGroup = this.parentNode.getElementsByTagName('label');
+        var level;
+        for( level = 0; level < btnGroup.length; level++ ) {
+            if( btnGroup[level].getElementsByTagName('span')[0].innerHTML == this.getElementsByTagName('span')[0].innerHTML ) break;
+        }
+
+        // Setup confirm modal
+        modaloptions.btnPrimary = "Yes";
+        modaloptions.btnSecondary = "Cancel";
+        modaloptions.title = "Set level to "+levelName;
+        modaloptions.message = "Are you sure?";
+        modaloptions.callPrimary = function(){
+            // TODO - replace with send MQTT message
+            console.log(modaloptions.title + " ("+level+")");
+        };
+
+        $('#dlgConfirm').modal('show');
+        
+    });
+
+    // Set up modal listeners
+
+    var id = "#dlgConfirm";
+    $(id).find('.btn-primary').on('click',function(){
+        modaloptions.callPrimary();
+    });
+    $(id).find('.btn-secondary').on('click',function(){
+        modaloptions.callSecondary();
+    });
+    $(id).find('.close').click(function(){
+        modaloptions.callClose();
+    }); 
+    $(id).on('show.bs.modal', function() {
+        // Update modal
+        $(id).find('.modal-title').html(modaloptions.title);
+        $(id).find('.modal-body').html(modaloptions.message);
+        $(id).find('.btn-primary').html(modaloptions.btnPrimary);
+        $(id).find('.btn-secondary').html(modaloptions.btnSecondary);
     });
 
     // Apply DataTable extension to logging table

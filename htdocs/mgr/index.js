@@ -97,23 +97,19 @@ function updateDeviceList() {
                 // Set status
                 var devicestatus = document.createElement("span");
                 devicestatus.setAttribute("id","device-"+dev.code+"-"+dev.id+"-status");
-                devicestatus.setAttribute("class","statusdot mr-3");
-    
-                if( dev.status ) devicestatus.setAttribute("style", "background:green;");
-                else devicestatus.setAttribute("style", "background:red;");
-    
+                devicestatus.setAttribute("class","statusdot mr-3");    
                 devicestatusname.appendChild(devicestatus);
+
                 var devicetitle = document.createElement("span");
                 devicetitle.setAttribute("id","device-"+dev.code+"-"+dev.id+"-title");
                 devicetitle.innerHTML = dev.name;
                 devicestatusname.appendChild(devicetitle);
-    
+
                 var deviceconf = document.createElement("a");
                 deviceconf.setAttribute("id","device-"+dev.code+"-"+dev.id+"-conf");
                 deviceconf.setAttribute("class","pull-right");
-                deviceconf.setAttribute("href","conf.php?code="+dev.code+"&id="+dev.id);
                 deviceconf.innerHTML = "<span class='fa fa-fw fa-cogs' style='color:grey'></span>";
-    // TODO - disable URLs which device offline
+
                 devicename.appendChild(devicestatusname);
                 devicename.appendChild(deviceconf);
                 newcardheader.appendChild(devicename);
@@ -130,7 +126,7 @@ function updateDeviceList() {
     
                 var applaunch = document.createElement("a");
                 applaunch.setAttribute("id","device-"+dev.code+"-"+dev.id+"-launch");
-                applaunch.setAttribute("class","btn btn-primary");
+                applaunch.setAttribute("class","btn btn-primary disabled");
                 applaunch.setAttribute("href",thisapp.url+"?device="+dev.id);
                 applaunch.setAttribute("target","_blank");
                 applaunch.innerHTML = "Open &raquo;";
@@ -145,15 +141,19 @@ function updateDeviceList() {
 
                 coreUpdateDeviceTitle( dev.code, dev.id, callUpdateTitle );
     
+            } 
+
+            // Update status and links
+            if( dev.status ) {
+                $("#device-"+dev.code+"-"+dev.id+"-status").css("background","green");
+                $("#device-"+dev.code+"-"+dev.id+"-launch").removeClass("disabled");
+                $("#device-"+dev.code+"-"+dev.id+"-conf").attr("href","conf.php?code="+dev.code+"&id="+dev.id);
             } else {
-    
-                // Update status
-                var updatestatus = document.getElementById("device-"+dev.code+"-"+dev.id+"-status");
-    
-                if( dev.status ) updatestatus.setAttribute("style","background:green;");
-                else updatestatus.setAttribute("style","background:red;");
-    
+                $("#device-"+dev.code+"-"+dev.id+"-status").css("background","red");
+                $("#device-"+dev.code+"-"+dev.id+"-launch").addClass("disabled");
+                $("#device-"+dev.code+"-"+dev.id+"-conf").removeAttr('href');
             }
+
         }
 
     });

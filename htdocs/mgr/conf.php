@@ -147,12 +147,14 @@ if (!securePage($_SERVER['PHP_SELF'])) {
                     <h5 class="card-title">Update</h5>
                   </div>
                   <div class="col-auto">
-                    <input id="autoupdate" class="" type="checkbox" data-toggle="toggle" data-onstyle="secondary" data-on="<i class='fa fa-play'></i> Auto" data-off="Auto <i class='fa fa-pause'></i>" data-size="sm">
+                    <div class="togglewrapper">
+                      <input id="autoupdate" data-toggle="toggle" type="checkbox" data-onstyle="secondary" data-on="<i class='fa fa-play'></i> Auto" data-off="Auto <i class='fa fa-pause'></i>" data-size="sm">
+                    </div>
                   </div>
                 </div> 
               </div>
               <p class="card-text">Request firmware update.</p>
-              <a href="#" class="btn btn-secondary btn-sm">Update Now</a>
+              <a id="requestupdate" href="#" class="btn btn-secondary btn-sm">Update Now</a>
             </div>
           </div>
         </div>
@@ -163,7 +165,7 @@ if (!securePage($_SERVER['PHP_SELF'])) {
             <div class="card-body">
               <h5 class="card-title">Device</h5>
               <p class="card-text">Reboot the device.</p>
-              <a href="#" class="btn btn-secondary btn-sm">Restart</a>
+              <a id="requestrestart" href="#" class="btn btn-outline-danger btn-sm">Restart</a>
             </div>
           </div>
           <div class="card">
@@ -173,13 +175,13 @@ if (!securePage($_SERVER['PHP_SELF'])) {
               <div class="container p-0">
                 <div class="row">
                   <div class="col-auto mb-2">
-                    <a href="#" style="width: 120px;" class="btn btn-outline-danger btn-sm">All Settings</a>
+                    <a id="requestrstall" href="#" style="width: 120px;" class="btn btn-danger btn-sm">All Settings</a>
                   </div>
                   <div class="col-auto mb-2">
-                    <a href="#" style="width: 120px;" class="btn btn-secondary btn-sm">Network</a>
+                    <a id="requestrstnetwork" href="#" style="width: 120px;" class="btn btn-secondary btn-sm">Network</a>
                   </div>
                   <div class="col-auto mr-auto">
-                    <a href="#" style="width: 120px;" class="btn btn-secondary btn-sm">Time/Location</a>
+                    <a id="requestrsttimeloc" href="#" style="width: 120px;" class="btn btn-secondary btn-sm">Time/Location</a>
                   </div>
                 </div> 
               </div>
@@ -215,25 +217,29 @@ if (!securePage($_SERVER['PHP_SELF'])) {
     <div class="container">
       <div class="row">
         <div class="col-auto mr-auto">
-          <input id="logOn" type="checkbox"  data-toggle="toggle" data-onstyle="secondary" data-on="<i class='fa fa-play'></i> On" data-off="Off <i class='fa fa-pause'></i>" data-size="sm">
+          <div class="togglewrapper">
+            <input id="logOn" type="checkbox" data-toggle="toggle" data-onstyle="secondary" data-on="<i class='fa fa-play'></i> On" data-off="Off <i class='fa fa-pause'></i>" data-size="sm">
+          </div>
           <div id="logLevel" class="btn-group btn-group-toggle mt-1 mb-1 mr-1" data-toggle="buttons">
             <label id="logLevel0" class="btn btn-sm btn-light">
-              <input type="radio" name="options" autocomplete="off"> Critical
+              <input type="radio" name="options" autocomplete="off"><span>Critical</span>
             </label>
             <label id="logLevel1" class="btn btn-sm btn-light">
-              <input type="radio" name="options" autocomplete="off"> Normal
+              <input type="radio" name="options" autocomplete="off"><span>Normal</span>
             </label>
             <label id="logLevel2" class="btn btn-sm btn-light">
-              <input type="radio" name="options" autocomplete="off"> High
+              <input type="radio" name="options" autocomplete="off"><span>High</span>
             </label>
             <label id="logLevel3" class="btn btn-sm btn-light">
-              <input type="radio" name="options" autocomplete="off"> Verbose
+              <input type="radio" name="options" autocomplete="off"><span>Verbose</span>
             </label>
           </div>
         </div>
         <div class="col-auto">
           <input id="logMQTT" type="checkbox" data-toggle="toggle" data-onstyle="secondary" data-on="<i class='fa fa-play'></i> MQTT" data-off="MQTT <i class='fa fa-pause'></i>" data-size="sm"> 
-          <input id="logTicker" type="checkbox" data-toggle="toggle" data-onstyle="secondary" data-on="<i class='fa fa-play'></i> Ticker" data-off="Ticker <i class='fa fa-pause'></i>" data-size="sm"> 
+          <div class="togglewrapper">
+            <input id="logTicker" type="checkbox" data-toggle="toggle" data-onstyle="secondary" data-on="<i class='fa fa-play'></i> Ticker" data-off="Ticker <i class='fa fa-pause'></i>" data-size="sm"> 
+          </div>
         </div>
       </div>
     </div>
@@ -259,5 +265,26 @@ if (!securePage($_SERVER['PHP_SELF'])) {
   </small>
 </div>
 <br>
+
+<!-- Modal -->
+<div class="modal fade" id="dlgConfirm" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Modal title</h5>
+        <button id="confirm-close" type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="confirm-primary" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" id="confirm-secondary" class="btn btn-primary" data-dismiss="modal">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <?php require_once $abs_us_root.$us_url_root.'users/includes/html_footer.php'; ?>
